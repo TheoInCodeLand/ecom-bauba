@@ -490,3 +490,5 @@ Cannot read properties of null (reading 'id')
 2026-07-01 15:59:08 [info]: 🏛  Maison Luxe running on http://localhost:3000 [development]
 2026-07-01 15:59:11 [warn]: Mailer connection could not be verified {"err":"Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-477db3dba3csm68491f8f.3 - gsmtp"}
 2026-07-01 16:05:13 [warn]: Mailer connection could not be verified {"err":"Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-477db8a4b83sm95135f8f.12 - gsmtp"}
+2026-07-01 16:05:29 [info]: 🏛  Maison Luxe running on http://localhost:3000 [development]
+2026-07-01 16:05:31 [warn]: Mailer connection could not be verified {"err":"Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-477db8a4a09sm89838f8f.13 - gsmtp"}
