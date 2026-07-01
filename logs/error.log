@@ -309,3 +309,7 @@ Cannot read properties of null (reading 'id')
     at async Object.create (C:\Users\22033\Desktop\com\models\productModel.js:256:26)
     at async C:\Users\22033\Desktop\com\routes\admin\products.js:70:21 {"err":"duplicate key value violates unique constraint \"products_slug_key\"","url":"/admin/products/new","method":"POST","userId":1,"ip":"::1"}
 2026-07-01 15:20:00 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
+2026-07-01 17:20:14 [error]: Unhandled error {"err":"Server returned unexpected status code - 403","url":"/admin/products/4/edit","method":"POST","userId":1,"ip":"::1"}
+2026-07-01 17:29:54 [error]: Unhandled error {"err":"Server returned unexpected status code - 403","url":"/admin/products/4/edit","method":"POST","userId":1,"ip":"::1"}
+2026-07-01 17:34:26 [error]: Unhandled error {"err":"Server returned unexpected status code - 403","url":"/admin/products/4/edit","method":"POST","userId":1,"ip":"::1"}
+2026-07-01 17:37:48 [error]: Unhandled error {"err":"Server returned unexpected status code - 403","url":"/admin/products/4/edit","method":"POST","userId":1,"ip":"::1"}

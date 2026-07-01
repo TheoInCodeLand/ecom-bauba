@@ -60,7 +60,11 @@ app.use(helmet({
 app.set('trust proxy', 1);
 
 // ─── HTTP Logger ─────────────────────────────────────────────────────────────
-app.use(morgan('combined', { stream: logger.stream }));
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+} else {
+    app.use(morgan('combined', { stream: logger.stream }));
+}
 
 // ─── Static Files ────────────────────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public'), {
