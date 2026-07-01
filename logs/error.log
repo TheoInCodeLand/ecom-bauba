@@ -308,3 +308,4 @@ Cannot read properties of null (reading 'id')
     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
     at async Object.create (C:\Users\22033\Desktop\com\models\productModel.js:256:26)
     at async C:\Users\22033\Desktop\com\routes\admin\products.js:70:21 {"err":"duplicate key value violates unique constraint \"products_slug_key\"","url":"/admin/products/new","method":"POST","userId":1,"ip":"::1"}
+2026-07-01 15:20:00 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}

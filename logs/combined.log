@@ -477,3 +477,10 @@ Cannot read properties of null (reading 'id')
 2026-07-01 12:58:47 [info]: Reservation cleanup cron registered (every 10 min)
 2026-07-01 12:58:47 [info]: 🏛  Maison Luxe running on http://localhost:3000 [development]
 2026-07-01 12:58:49 [warn]: Mailer connection could not be verified {"err":"Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-493be4fc1ddsm73831435e9.14 - gsmtp"}
+2026-07-01 12:59:12 [info]: Reservation cleanup cron registered (every 10 min)
+2026-07-01 12:59:12 [info]: 🏛  Maison Luxe running on http://localhost:3000 [development]
+2026-07-01 12:59:13 [warn]: Mailer connection could not be verified {"err":"Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-493be4d2a9fsm73456835e9.6 - gsmtp"}
+2026-07-01 14:05:40 [info]: Reservation cleanup cron registered (every 10 min)
+2026-07-01 14:05:40 [info]: 🏛  Maison Luxe running on http://localhost:3000 [development]
+2026-07-01 14:05:42 [warn]: Mailer connection could not be verified {"err":"Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-493be810be8sm67517035e9.9 - gsmtp"}
+2026-07-01 15:20:00 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
