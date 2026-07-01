@@ -1,5 +1,4 @@
 'use strict';
-const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 
 /**
@@ -14,7 +13,7 @@ function generateIdempotencyKey(context = '', payload = '') {
         .update(String(payload))
         .digest('hex')
         .slice(0, 12);
-    return `${uuidv4()}-${context}-${hash}`;
+    return `${crypto.randomUUID()}-${context}-${hash}`;
 }
 
 module.exports = generateIdempotencyKey;

@@ -471,3 +471,9 @@ Cannot read properties of null (reading 'id')
     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
     at async Object.create (C:\Users\22033\Desktop\com\models\productModel.js:256:26)
     at async C:\Users\22033\Desktop\com\routes\admin\products.js:70:21 {"err":"duplicate key value violates unique constraint \"products_slug_key\"","url":"/admin/products/new","method":"POST","userId":1,"ip":"::1"}
+2026-07-01 12:36:26 [info]: Reservation cleanup cron registered (every 10 min)
+2026-07-01 12:36:26 [info]: 🏛  Maison Luxe running on http://localhost:3000 [development]
+2026-07-01 12:36:28 [warn]: Mailer connection could not be verified {"err":"Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-47563d194bbsm14103579f8f.3 - gsmtp"}
+2026-07-01 12:58:47 [info]: Reservation cleanup cron registered (every 10 min)
+2026-07-01 12:58:47 [info]: 🏛  Maison Luxe running on http://localhost:3000 [development]
+2026-07-01 12:58:49 [warn]: Mailer connection could not be verified {"err":"Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-493be4fc1ddsm73831435e9.14 - gsmtp"}

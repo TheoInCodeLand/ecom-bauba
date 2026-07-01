@@ -1,6 +1,6 @@
 'use strict';
 const { pool }   = require('../config/database');
-const { v4: uuidv4 } = require('uuid');
+const { randomUUID } = require('crypto');
 
 const stockService = {
     /**
@@ -28,7 +28,7 @@ const stockService = {
     async reserve(items, userId, sessionId, client = pool) {
         const results = [];
         for (const item of items) {
-            const token  = uuidv4();
+            const token  = randomUUID();
             const expiry = new Date(Date.now() + (parseInt(process.env.STOCK_RESERVATION_MINUTES)||15) * 60000);
 
             // Check availability with a lock
