@@ -1,8 +1,8 @@
 node_modules/
 .env
-logs/
+# logs/
 public/uploads/
 uploads/
-*.log
+# *.log
 .DS_Store
 Thumbs.db

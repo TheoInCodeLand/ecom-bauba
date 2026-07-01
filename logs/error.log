@@ -1,0 +1,310 @@
+2026-06-26 14:50:00 [error]: Reservation cleanup cron failed {"err":"SASL: SCRAM-SERVER-FIRST-MESSAGE: client password must be a string"}
+2026-06-26 15:00:00 [error]: Reservation cleanup cron failed {"err":"SASL: SCRAM-SERVER-FIRST-MESSAGE: client password must be a string"}
+2026-06-26 20:47:39 [error]: ReferenceError: C:\Users\22033\Desktop\com\views\errors\404.ejs:1
+ >> 1| <%- include('../partials/head') %>
+    2| <%- include('../partials/nav') %>
+    3| <main>
+    4| <section style="min-height:75vh;display:flex;align-items:center;justify-content:center;padding:var(--space-3xl) var(--space-md);text-align:center;">
+
+C:\Users\22033\Desktop\com\views\partials\head.ejs:7
+    5|   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    6|   <title><%= title || (store && store.store_name ? store.store_name : 'Maison Luxe') %></title>
+ >> 7|   <meta name="description" content="<%= description || (store && store.seo_description) || 'Shop authentic luxury fashion at Maison Luxe' %>">
+    8|   <meta name="theme-color" content="#0a0a0a">
+    9| 
+    10|   <!-- Open Graph -->
+
+description is not defined
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\partials\\head.ejs":15:26)
+    at head (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at include (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:634:47)
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\errors\\404.ejs":10:17)
+    at 404 (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\22033\Desktop\com\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:574:3) {"err":"C:\\Users\\22033\\Desktop\\com\\views\\errors\\404.ejs:1\n >> 1| <%- include('../partials/head') %>\n    2| <%- include('../partials/nav') %>\n    3| <main>\n    4| <section style=\"min-height:75vh;display:flex;align-items:center;justify-content:center;padding:var(--space-3xl) var(--space-md);text-align:center;\">\n\nC:\\Users\\22033\\Desktop\\com\\views\\partials\\head.ejs:7\n    5|   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    6|   <title><%= title || (store && store.store_name ? store.store_name : 'Maison Luxe') %></title>\n >> 7|   <meta name=\"description\" content=\"<%= description || (store && store.seo_description) || 'Shop authentic luxury fashion at Maison Luxe' %>\">\n    8|   <meta name=\"theme-color\" content=\"#0a0a0a\">\n    9| \n    10|   <!-- Open Graph -->\n\ndescription is not defined","url":"/css/hero-pattern.svg","method":"GET","ip":"::1"}
+2026-06-26 20:56:22 [error]: ReferenceError: C:\Users\22033\Desktop\com\views\errors\404.ejs:1
+ >> 1| <%- include('../partials/head') %>
+    2| <%- include('../partials/nav') %>
+    3| <main>
+    4| <section style="min-height:75vh;display:flex;align-items:center;justify-content:center;padding:var(--space-3xl) var(--space-md);text-align:center;">
+
+C:\Users\22033\Desktop\com\views\partials\head.ejs:7
+    5|   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    6|   <title><%= title || (store && store.store_name ? store.store_name : 'Maison Luxe') %></title>
+ >> 7|   <meta name="description" content="<%= description || (store && store.seo_description) || 'Shop authentic luxury fashion at Maison Luxe' %>">
+    8|   <meta name="theme-color" content="#0a0a0a">
+    9| 
+    10|   <!-- Open Graph -->
+
+description is not defined
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\partials\\head.ejs":15:26)
+    at head (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at include (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:634:47)
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\errors\\404.ejs":10:17)
+    at 404 (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\22033\Desktop\com\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:574:3) {"err":"C:\\Users\\22033\\Desktop\\com\\views\\errors\\404.ejs:1\n >> 1| <%- include('../partials/head') %>\n    2| <%- include('../partials/nav') %>\n    3| <main>\n    4| <section style=\"min-height:75vh;display:flex;align-items:center;justify-content:center;padding:var(--space-3xl) var(--space-md);text-align:center;\">\n\nC:\\Users\\22033\\Desktop\\com\\views\\partials\\head.ejs:7\n    5|   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    6|   <title><%= title || (store && store.store_name ? store.store_name : 'Maison Luxe') %></title>\n >> 7|   <meta name=\"description\" content=\"<%= description || (store && store.seo_description) || 'Shop authentic luxury fashion at Maison Luxe' %>\">\n    8|   <meta name=\"theme-color\" content=\"#0a0a0a\">\n    9| \n    10|   <!-- Open Graph -->\n\ndescription is not defined","url":"/css/hero-pattern.svg","method":"GET","ip":"::1"}
+2026-06-26 21:06:12 [error]: error: column p.stock_total does not exist
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async Object.adminList (C:\Users\22033\Desktop\com\models\productModel.js:198:26)
+    at async C:\Users\22033\Desktop\com\routes\admin\products.js:33:22 {"err":"column p.stock_total does not exist","url":"/admin/products","method":"GET","userId":1,"ip":"::1"}
+2026-06-26 21:15:42 [error]: Unexpected PostgreSQL pool error {"err":"read ECONNRESET"}
+2026-06-26 21:15:51 [error]: Unexpected PostgreSQL pool error {"err":"Connection terminated unexpectedly"}
+2026-06-26 21:19:54 [error]: Error: Connection terminated due to connection timeout
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async PGStore._asyncQuery (C:\Users\22033\Desktop\com\node_modules\connect-pg-simple\index.js:322:21) {"err":"Connection terminated due to connection timeout","url":"/admin/products","method":"GET","ip":"::1"}
+2026-06-26 21:20:05 [error]: Reservation cleanup cron failed {"err":"Connection terminated due to connection timeout"}
+2026-06-26 21:22:47 [error]: ReferenceError: C:\Users\22033\Desktop\com\views\admin\products\form.ejs:146
+    144|         <div class="admin-card-header"><h2>Images</h2></div>
+    145|         <div class="admin-card-body">
+ >> 146|           <% if (images && images.length) { %>
+    147|           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:1rem;">
+    148|             <% images.forEach(img => { %>
+    149|             <div style="position:relative;">
+
+images is not defined
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\admin\\products\\form.ejs":113:8)
+    at form (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\22033\Desktop\com\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\22033\Desktop\com\node_modules\express\lib\response.js:923:7)
+    at C:\Users\22033\Desktop\com\routes\admin\products.js:43:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {"err":"C:\\Users\\22033\\Desktop\\com\\views\\admin\\products\\form.ejs:146\n    144|         <div class=\"admin-card-header\"><h2>Images</h2></div>\n    145|         <div class=\"admin-card-body\">\n >> 146|           <% if (images && images.length) { %>\n    147|           <div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:1rem;\">\n    148|             <% images.forEach(img => { %>\n    149|             <div style=\"position:relative;\">\n\nimages is not defined","url":"/admin/products/new","method":"GET","userId":1,"ip":"::1"}
+2026-06-26 21:25:52 [error]: Unexpected PostgreSQL pool error {"err":"Connection terminated unexpectedly"}
+2026-06-26 21:35:25 [error]: Unexpected PostgreSQL pool error {"err":"Connection terminated unexpectedly"}
+2026-06-26 21:35:44 [error]: Unexpected PostgreSQL pool error {"err":"Connection terminated unexpectedly"}
+2026-06-26 21:36:29 [error]: Error: Connection terminated due to connection timeout
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async PGStore._asyncQuery (C:\Users\22033\Desktop\com\node_modules\connect-pg-simple\index.js:322:21) {"err":"Connection terminated due to connection timeout","url":"/admin/products","method":"GET","ip":"::1"}
+2026-06-26 21:37:10 [error]: ReferenceError: C:\Users\22033\Desktop\com\views\admin\products\form.ejs:146
+    144|         <div class="admin-card-header"><h2>Images</h2></div>
+    145|         <div class="admin-card-body">
+ >> 146|           <% if (images && images.length) { %>
+    147|           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:1rem;">
+    148|             <% images.forEach(img => { %>
+    149|             <div style="position:relative;">
+
+images is not defined
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\admin\\products\\form.ejs":113:8)
+    at form (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\22033\Desktop\com\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\22033\Desktop\com\node_modules\express\lib\response.js:923:7)
+    at C:\Users\22033\Desktop\com\routes\admin\products.js:43:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {"err":"C:\\Users\\22033\\Desktop\\com\\views\\admin\\products\\form.ejs:146\n    144|         <div class=\"admin-card-header\"><h2>Images</h2></div>\n    145|         <div class=\"admin-card-body\">\n >> 146|           <% if (images && images.length) { %>\n    147|           <div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:1rem;\">\n    148|             <% images.forEach(img => { %>\n    149|             <div style=\"position:relative;\">\n\nimages is not defined","url":"/admin/products/new","method":"GET","userId":1,"ip":"::1"}
+2026-06-26 21:46:29 [error]: Unexpected PostgreSQL pool error {"err":"Connection terminated unexpectedly"}
+2026-06-26 21:49:24 [error]: Error: Failed to lookup view "pages/returns-policy" in views directory "C:\Users\22033\Desktop\com\views"
+    at app.render (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:562:17)
+    at ServerResponse.render (C:\Users\22033\Desktop\com\node_modules\express\lib\response.js:923:7)
+    at C:\Users\22033\Desktop\com\routes\index.js:51:51
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\22033\Desktop\com\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\22033\Desktop\com\node_modules\router\index.js:295:15
+    at processParams (C:\Users\22033\Desktop\com\node_modules\router\index.js:582:12) {"err":"Failed to lookup view \"pages/returns-policy\" in views directory \"C:\\Users\\22033\\Desktop\\com\\views\"","url":"/returns-policy","method":"GET","userId":1,"ip":"::1"}
+2026-06-26 21:51:09 [error]: error: invalid input syntax for type numeric: ""
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async Promise.all (index 1)
+    at async Object.browse (C:\Users\22033\Desktop\com\models\productModel.js:138:49)
+    at async C:\Users\22033\Desktop\com\routes\shop.js:24:33 {"err":"invalid input syntax for type numeric: \"\"","url":"/shop?category=bag-pack&minPrice=&maxPrice=&sort=newest","method":"GET","userId":1,"ip":"::1"}
+2026-06-26 21:51:30 [error]: error: invalid input syntax for type numeric: ""
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async Promise.all (index 1)
+    at async Object.browse (C:\Users\22033\Desktop\com\models\productModel.js:138:49)
+    at async C:\Users\22033\Desktop\com\routes\shop.js:24:33 {"err":"invalid input syntax for type numeric: \"\"","url":"/shop?category=men&minPrice=&maxPrice=&sort=newest","method":"GET","userId":1,"ip":"::1"}
+2026-06-26 22:03:06 [error]: Unexpected PostgreSQL pool error {"err":"Connection terminated unexpectedly"}
+2026-06-26 22:13:41 [error]: Unexpected PostgreSQL pool error {"err":"Connection terminated unexpectedly"}
+2026-06-26 22:13:41 [error]: Unexpected PostgreSQL pool error {"err":"Connection terminated unexpectedly"}
+2026-06-26 22:26:18 [error]: Error: Connection terminated due to connection timeout
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async PGStore._asyncQuery (C:\Users\22033\Desktop\com\node_modules\connect-pg-simple\index.js:322:21)
+    at async PGStore._rawEnsureSessionStoreTable (C:\Users\22033\Desktop\com\node_modules\connect-pg-simple\index.js:177:19)
+    at async PGStore._asyncQuery (C:\Users\22033\Desktop\com\node_modules\connect-pg-simple\index.js:315:7) {"err":"Connection terminated due to connection timeout","url":"/","method":"GET","ip":"::1"}
+2026-06-26 22:28:07 [error]: Error: Connection terminated due to connection timeout
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async PGStore._asyncQuery (C:\Users\22033\Desktop\com\node_modules\connect-pg-simple\index.js:322:21)
+    at async PGStore._rawEnsureSessionStoreTable (C:\Users\22033\Desktop\com\node_modules\connect-pg-simple\index.js:177:19)
+    at async PGStore._asyncQuery (C:\Users\22033\Desktop\com\node_modules\connect-pg-simple\index.js:315:7) {"err":"Connection terminated due to connection timeout","url":"/","method":"GET","ip":"::1"}
+2026-06-26 23:25:28 [error]: TypeError: Cannot destructure property 'firstName' of 'req.body' as it is undefined.
+    at C:\Users\22033\Desktop\com\routes\account.js:39:13
+    at C:\Users\22033\Desktop\com\utils\catchAsync.js:3:21
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:157:13)
+    at isAuthenticated (C:\Users\22033\Desktop\com\middleware\auth.js:7:49)
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\22033\Desktop\com\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17) {"err":"Cannot destructure property 'firstName' of 'req.body' as it is undefined.","url":"/account/profile","method":"POST","userId":2,"ip":"::1"}
+2026-06-26 23:26:26 [error]: Error: Failed to lookup view "category" in views directory "C:\Users\22033\Desktop\com\views"
+    at app.render (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:562:17)
+    at ServerResponse.render (C:\Users\22033\Desktop\com\node_modules\express\lib\response.js:923:7)
+    at C:\Users\22033\Desktop\com\routes\categories.js:20:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {"err":"Failed to lookup view \"category\" in views directory \"C:\\Users\\22033\\Desktop\\com\\views\"","url":"/category/clothing","method":"GET","userId":2,"ip":"::1"}
+2026-06-26 23:27:19 [error]: TypeError: Cannot destructure property 'variantId' of 'req.body' as it is undefined.
+    at C:\Users\22033\Desktop\com\routes\cart.js:32:13
+    at C:\Users\22033\Desktop\com\utils\catchAsync.js:3:21
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\22033\Desktop\com\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\22033\Desktop\com\node_modules\router\index.js:295:15
+    at processParams (C:\Users\22033\Desktop\com\node_modules\router\index.js:582:12)
+    at next (C:\Users\22033\Desktop\com\node_modules\router\index.js:291:5) {"err":"Cannot destructure property 'variantId' of 'req.body' as it is undefined.","url":"/cart/add","method":"POST","userId":2,"ip":"::1"}
+2026-06-26 23:32:25 [error]: TypeError: Cannot destructure property 'variantId' of 'req.body' as it is undefined.
+    at C:\Users\22033\Desktop\com\routes\cart.js:32:13
+    at C:\Users\22033\Desktop\com\utils\catchAsync.js:3:21
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\22033\Desktop\com\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\22033\Desktop\com\node_modules\router\index.js:295:15
+    at processParams (C:\Users\22033\Desktop\com\node_modules\router\index.js:582:12)
+    at next (C:\Users\22033\Desktop\com\node_modules\router\index.js:291:5) {"err":"Cannot destructure property 'variantId' of 'req.body' as it is undefined.","url":"/cart/add","method":"POST","userId":2,"ip":"::1"}
+2026-06-26 23:32:54 [error]: TypeError: Cannot destructure property 'variantId' of 'req.body' as it is undefined.
+    at C:\Users\22033\Desktop\com\routes\cart.js:32:13
+    at C:\Users\22033\Desktop\com\utils\catchAsync.js:3:21
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\22033\Desktop\com\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\22033\Desktop\com\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\22033\Desktop\com\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\22033\Desktop\com\node_modules\router\index.js:295:15
+    at processParams (C:\Users\22033\Desktop\com\node_modules\router\index.js:582:12)
+    at next (C:\Users\22033\Desktop\com\node_modules\router\index.js:291:5) {"err":"Cannot destructure property 'variantId' of 'req.body' as it is undefined.","url":"/cart/add","method":"POST","userId":2,"ip":"::1"}
+2026-06-26 23:44:22 [error]: error: there is no unique or exclusion constraint matching the ON CONFLICT specification
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async Object.upsert (C:\Users\22033\Desktop\com\models\cartModel.js:39:13)
+    at async C:\Users\22033\Desktop\com\routes\cart.js:45:5 {"err":"there is no unique or exclusion constraint matching the ON CONFLICT specification","url":"/cart/add","method":"POST","userId":2,"ip":"::1"}
+2026-06-26 23:45:00 [error]: error: there is no unique or exclusion constraint matching the ON CONFLICT specification
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async Object.upsert (C:\Users\22033\Desktop\com\models\cartModel.js:39:13)
+    at async C:\Users\22033\Desktop\com\routes\cart.js:45:5 {"err":"there is no unique or exclusion constraint matching the ON CONFLICT specification","url":"/cart/add","method":"POST","userId":2,"ip":"::1"}
+2026-06-26 23:53:19 [error]: ReferenceError: C:\Users\22033\Desktop\com\views\checkout\review.ejs:86
+    84|       <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:400;margin-bottom:var(--space-lg);padding-bottom:var(--space-md);border-bottom:1px solid var(--border);">Order Total</h2>
+    85|       <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:var(--ash);"><span>Subtotal</span><span><%= formatCurrency(subtotal) %></span></div>
+ >> 86|       <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:var(--ash);"><span>Shipping</span><span><%= parseFloat(shipping)===0 ? 'FREE' : formatCurrency(shipping) %></span></div>
+    87|       <% if (discountAmount > 0) { %>
+    88|       <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:#27ae60;"><span>Discount</span><span>−<%= formatCurrency(discountAmount) %></span></div>
+    89|       <% } %>
+
+shipping is not defined
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\checkout\\review.ejs":110:37)
+    at review (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\22033\Desktop\com\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\22033\Desktop\com\node_modules\express\lib\response.js:923:7)
+    at C:\Users\22033\Desktop\com\routes\checkout.js:69:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {"err":"C:\\Users\\22033\\Desktop\\com\\views\\checkout\\review.ejs:86\n    84|       <h2 style=\"font-family:var(--font-serif);font-size:1.2rem;font-weight:400;margin-bottom:var(--space-lg);padding-bottom:var(--space-md);border-bottom:1px solid var(--border);\">Order Total</h2>\n    85|       <div style=\"display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:var(--ash);\"><span>Subtotal</span><span><%= formatCurrency(subtotal) %></span></div>\n >> 86|       <div style=\"display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:var(--ash);\"><span>Shipping</span><span><%= parseFloat(shipping)===0 ? 'FREE' : formatCurrency(shipping) %></span></div>\n    87|       <% if (discountAmount > 0) { %>\n    88|       <div style=\"display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:#27ae60;\"><span>Discount</span><span>−<%= formatCurrency(discountAmount) %></span></div>\n    89|       <% } %>\n\nshipping is not defined","url":"/checkout/review","method":"POST","userId":2,"ip":"::1"}
+2026-06-26 23:54:26 [error]: ReferenceError: C:\Users\22033\Desktop\com\views\checkout\review.ejs:86
+    84|       <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:400;margin-bottom:var(--space-lg);padding-bottom:var(--space-md);border-bottom:1px solid var(--border);">Order Total</h2>
+    85|       <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:var(--ash);"><span>Subtotal</span><span><%= formatCurrency(subtotal) %></span></div>
+ >> 86|       <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:var(--ash);"><span>Shipping</span><span><%= parseFloat(shipping)===0 ? 'FREE' : formatCurrency(shipping) %></span></div>
+    87|       <% if (discountAmount > 0) { %>
+    88|       <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:#27ae60;"><span>Discount</span><span>−<%= formatCurrency(discountAmount) %></span></div>
+    89|       <% } %>
+
+shipping is not defined
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\checkout\\review.ejs":110:37)
+    at review (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\22033\Desktop\com\node_modules\express\lib\view.js:139:8)
+    at tryRender (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:627:10)
+    at app.render (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (C:\Users\22033\Desktop\com\node_modules\express\lib\response.js:923:7)
+    at C:\Users\22033\Desktop\com\routes\checkout.js:69:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {"err":"C:\\Users\\22033\\Desktop\\com\\views\\checkout\\review.ejs:86\n    84|       <h2 style=\"font-family:var(--font-serif);font-size:1.2rem;font-weight:400;margin-bottom:var(--space-lg);padding-bottom:var(--space-md);border-bottom:1px solid var(--border);\">Order Total</h2>\n    85|       <div style=\"display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:var(--ash);\"><span>Subtotal</span><span><%= formatCurrency(subtotal) %></span></div>\n >> 86|       <div style=\"display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:var(--ash);\"><span>Shipping</span><span><%= parseFloat(shipping)===0 ? 'FREE' : formatCurrency(shipping) %></span></div>\n    87|       <% if (discountAmount > 0) { %>\n    88|       <div style=\"display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:#27ae60;\"><span>Discount</span><span>−<%= formatCurrency(discountAmount) %></span></div>\n    89|       <% } %>\n\nshipping is not defined","url":"/checkout/review","method":"POST","userId":2,"ip":"::1"}
+2026-06-27 01:16:57 [error]: TypeError: generateSignature is not a function
+    at Object.validateITN (C:\Users\22033\Desktop\com\services\paymentService.js:99:26)
+    at C:\Users\22033\Desktop\com\routes\payment.js:60:25 {"err":"generateSignature is not a function","url":"/payment/notify","method":"POST","ip":"144.126.193.139"}
+2026-06-29 11:14:23 [error]: Error: Failed to lookup view "category" in views directory "C:\Users\22033\Desktop\com\views"
+    at app.render (C:\Users\22033\Desktop\com\node_modules\express\lib\application.js:562:17)
+    at ServerResponse.render (C:\Users\22033\Desktop\com\node_modules\express\lib\response.js:923:7)
+    at C:\Users\22033\Desktop\com\routes\categories.js:20:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {"err":"Failed to lookup view \"category\" in views directory \"C:\\Users\\22033\\Desktop\\com\\views\"","url":"/category/clothing","method":"GET","userId":1,"ip":"::1"}
+2026-06-30 20:10:00 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
+2026-07-01 09:40:00 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
+2026-07-01 09:40:00 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
+2026-07-01 10:10:11 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
+2026-07-01 10:10:11 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
+2026-07-01 10:20:00 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
+2026-07-01 10:20:00 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
+2026-07-01 10:30:00 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
+2026-07-01 10:30:00 [error]: Reservation cleanup cron failed {"err":"getaddrinfo ENOTFOUND ep-autumn-bird-atvahwu8-pooler.c-9.us-east-1.aws.neon.tech"}
+2026-07-01 11:13:01 [error]: Error: Only JPEG, PNG and WebP images are allowed
+    at fileFilter (C:\Users\22033\Desktop\com\config\multer.js:22:19)
+    at wrappedFileFilter (C:\Users\22033\Desktop\com\node_modules\multer\index.js:45:7)
+    at Multipart.<anonymous> (C:\Users\22033\Desktop\com\node_modules\multer\lib\make-middleware.js:193:7)
+    at Multipart.emit (node:events:508:28)
+    at HeaderParser.cb (C:\Users\22033\Desktop\com\node_modules\busboy\lib\types\multipart.js:358:14)
+    at HeaderParser.push (C:\Users\22033\Desktop\com\node_modules\busboy\lib\types\multipart.js:162:20)
+    at SBMH.ssCb [as _cb] (C:\Users\22033\Desktop\com\node_modules\busboy\lib\types\multipart.js:394:37)
+    at feed (C:\Users\22033\Desktop\com\node_modules\streamsearch\lib\sbmh.js:248:10)
+    at SBMH.push (C:\Users\22033\Desktop\com\node_modules\streamsearch\lib\sbmh.js:104:16)
+    at Multipart._write (C:\Users\22033\Desktop\com\node_modules\busboy\lib\types\multipart.js:567:19) {"err":"Only JPEG, PNG and WebP images are allowed","url":"/admin/products/new","method":"POST","userId":1,"ip":"::1"}
+2026-07-01 11:35:20 [error]: TypeError: C:\Users\22033\Desktop\com\views\shop.ejs:2
+    1| <%- include('partials/head') %>
+ >> 2| <%- include('partials/nav') %>
+    3| <%- include('partials/flash') %>
+    4| <main>
+    5| <div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);">
+
+C:\Users\22033\Desktop\com\views\partials\nav.ejs:31
+    29|         <% (navTree || []).forEach(dept => { %>
+    30|           <li class="<%= dept.children && dept.children.length ? 'has-mega' : '' %>">
+ >> 31|             <a href="/category/<%= dept.slug %>" class="<%= typeof category !== 'undefined' && (category.id === dept.id || category.parent_id === dept.id) ? 'active' : '' %>"><%= dept.name %></a>
+    32|             <% if (dept.children && dept.children.length) { %>
+    33|               <div class="mega-menu">
+    34|                 <div class="mega-menu-inner">
+
+Cannot read properties of null (reading 'id')
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\partials\\nav.ejs":38:71)
+    at Array.forEach (<anonymous>)
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\partials\\nav.ejs":30:24)
+    at nav (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at include (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:634:47)
+    at eval ("C:\\Users\\22033\\Desktop\\com\\views\\shop.ejs":13:17)
+    at shop (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:643:23)
+    at tryHandleCache (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:253:42)
+    at ejs.renderFile [as engine] (C:\Users\22033\Desktop\com\node_modules\ejs\lib\cjs\ejs.js:444:12)
+    at View.render (C:\Users\22033\Desktop\com\node_modules\express\lib\view.js:139:8) {"err":"C:\\Users\\22033\\Desktop\\com\\views\\shop.ejs:2\n    1| <%- include('partials/head') %>\n >> 2| <%- include('partials/nav') %>\n    3| <%- include('partials/flash') %>\n    4| <main>\n    5| <div class=\"container\" style=\"padding:var(--space-2xl) var(--space-lg) var(--space-3xl);\">\n\nC:\\Users\\22033\\Desktop\\com\\views\\partials\\nav.ejs:31\n    29|         <% (navTree || []).forEach(dept => { %>\n    30|           <li class=\"<%= dept.children && dept.children.length ? 'has-mega' : '' %>\">\n >> 31|             <a href=\"/category/<%= dept.slug %>\" class=\"<%= typeof category !== 'undefined' && (category.id === dept.id || category.parent_id === dept.id) ? 'active' : '' %>\"><%= dept.name %></a>\n    32|             <% if (dept.children && dept.children.length) { %>\n    33|               <div class=\"mega-menu\">\n    34|                 <div class=\"mega-menu-inner\">\n\nCannot read properties of null (reading 'id')","url":"/shop","method":"GET","userId":1,"ip":"::1"}
+2026-07-01 11:39:08 [error]: Error: Connection terminated unexpectedly
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async PGStore._asyncQuery (C:\Users\22033\Desktop\com\node_modules\connect-pg-simple\index.js:322:21) {"err":"Connection terminated unexpectedly","url":"/category/men-clothing","method":"GET","ip":"::1"}
+2026-07-01 11:50:01 [error]: Reservation cleanup cron failed {"err":"read ECONNRESET"}
+2026-07-01 11:50:01 [error]: Reservation cleanup cron failed {"err":"read ECONNRESET"}
+2026-07-01 11:53:28 [error]: error: duplicate key value violates unique constraint "products_slug_key"
+    at C:\Users\22033\Desktop\com\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async Object.create (C:\Users\22033\Desktop\com\models\productModel.js:256:26)
+    at async C:\Users\22033\Desktop\com\routes\admin\products.js:70:21 {"err":"duplicate key value violates unique constraint \"products_slug_key\"","url":"/admin/products/new","method":"POST","userId":1,"ip":"::1"}
