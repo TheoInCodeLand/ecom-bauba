@@ -105,6 +105,7 @@ app.use('/orders', ordersRouter);
 app.use('/account', accountRouter);
 app.use('/search', searchRouter);
 app.use('/admin', adminRouter);
+app.use('/api/cron/cleanup', require('./cron/reservationCleanup'));
 
 // ─── 404 & Error Handlers ────────────────────────────────────────────────────
 app.use(notFound);
