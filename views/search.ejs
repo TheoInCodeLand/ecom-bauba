@@ -1,0 +1,54 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main>
+<div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);">
+  <div style="max-width:760px;">
+    <h1 style="font-family:var(--font-serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;margin-bottom:var(--space-sm);">
+      Search Results
+      <% if (query) { %><span style="color:var(--gold);">"<%= query %>"</span><% } %>
+    </h1>
+    <p style="color:var(--silver);margin-bottom:var(--space-2xl);">
+      <%= total || 0 %> item<%= total !== 1 ? 's' : '' %> found
+    </p>
+  </div>
+
+  <% if (products && products.length) { %>
+  <div class="product-grid">
+    <% products.forEach(product => { %>
+      <%- include('partials/product-card', { product }) %>
+    <% }) %>
+  </div>
+
+  <% if (pagination && pagination.totalPages > 1) { %>
+  <div class="pagination">
+    <% if (pagination.hasPrev) { %><a href="?q=<%= encodeURIComponent(query) %>&page=<%= pagination.prevPage %>" class="page-btn">‹</a><% } %>
+    <% for(let i=1;i<=pagination.totalPages;i++) { %><a href="?q=<%= encodeURIComponent(query) %>&page=<%= i %>" class="page-btn <%= pagination.page===i?'active':'' %>"><%= i %></a><% } %>
+    <% if (pagination.hasNext) { %><a href="?q=<%= encodeURIComponent(query) %>&page=<%= pagination.nextPage %>" class="page-btn">›</a><% } %>
+  </div>
+  <% } %>
+
+  <% } else if (query) { %>
+  <div class="empty-state">
+    <div class="empty-state__icon">🔍</div>
+    <h2 class="empty-state__title">No results for "<%= query %>"</h2>
+    <p class="empty-state__text">Try different keywords, or browse our collections.</p>
+    <a href="/shop" class="btn btn-gold btn-lg">Browse All</a>
+  </div>
+  <% } else { %>
+  <!-- Trending / initial state -->
+  <div style="text-align:center;padding:var(--space-3xl) 0;">
+    <p style="font-family:var(--font-serif);font-size:1.4rem;font-weight:300;color:var(--ash);margin-bottom:var(--space-xl);">
+      What are you looking for?
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--space-sm);justify-content:center;">
+      <% ['Handbags','Dresses','Jewellery','Shoes','Accessories','New Arrivals'].forEach(term => { %>
+      <a href="/search?q=<%= encodeURIComponent(term) %>" class="btn btn-outline"><%= term %></a>
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
+</div>
+</main>
+<%- include('partials/footer') %>
+</body></html>

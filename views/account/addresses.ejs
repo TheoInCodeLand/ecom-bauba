@@ -1,0 +1,80 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+<main>
+<div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);">
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:var(--space-2xl);">
+    <%- include('./sidebar') %>
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-2xl);">
+        <h1 style="font-family:var(--font-serif);font-size:2rem;font-weight:300;">My Addresses</h1>
+        <button class="btn btn-primary btn-sm" onclick="document.getElementById('add-address-form').style.display='block';this.style.display='none'">+ Add Address</button>
+      </div>
+
+      <!-- Add address form -->
+      <div id="add-address-form" style="display:none;margin-bottom:var(--space-2xl);">
+        <div class="card"><div class="card-body">
+          <h2 style="font-family:var(--font-serif);font-size:1.3rem;font-weight:400;margin-bottom:var(--space-xl);">New Address</h2>
+          <form method="POST" action="/account/addresses">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);">
+              <div class="form-group"><label class="form-label">First Name</label><input class="form-control" name="firstName" required></div>
+              <div class="form-group"><label class="form-label">Last Name</label><input class="form-control" name="lastName" required></div>
+            </div>
+            <div class="form-group"><label class="form-label">Company (optional)</label><input class="form-control" name="company"></div>
+            <div class="form-group"><label class="form-label">Address Line 1</label><input class="form-control" name="addressLine1" required></div>
+            <div class="form-group"><label class="form-label">Address Line 2</label><input class="form-control" name="addressLine2"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-md);">
+              <div class="form-group"><label class="form-label">City</label><input class="form-control" name="city" required></div>
+              <div class="form-group"><label class="form-label">Province</label><input class="form-control" name="province"></div>
+              <div class="form-group"><label class="form-label">Postal Code</label><input class="form-control" name="postalCode"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Country</label><input class="form-control" name="country" value="South Africa"></div>
+            <div class="form-group"><label class="form-label">Phone</label><input class="form-control" name="phone" type="tel"></div>
+            <div style="display:flex;gap:var(--space-md);">
+              <button type="submit" class="btn btn-primary">Save Address</button>
+              <button type="button" class="btn btn-ghost" onclick="document.getElementById('add-address-form').style.display='none'">Cancel</button>
+            </div>
+          </form>
+        </div></div>
+      </div>
+
+      <!-- Existing addresses -->
+      <% if (addresses && addresses.length) { %>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--space-lg);">
+        <% addresses.forEach(addr => { %>
+        <div class="card">
+          <div class="card-body">
+            <% if (addr.is_default) { %><span class="badge badge-new" style="margin-bottom:var(--space-sm);">Default</span><% } %>
+            <address style="font-style:normal;font-size:0.9rem;line-height:1.9;color:var(--ash);">
+              <strong style="color:var(--obsidian);font-size:1rem;"><%= addr.first_name %> <%= addr.last_name %></strong><br>
+              <% if (addr.company) { %><%= addr.company %><br><% } %>
+              <%= addr.address_line_1 %><br>
+              <% if (addr.address_line_2) { %><%= addr.address_line_2 %><br><% } %>
+              <%= addr.city %><% if (addr.province) { %>, <%= addr.province %><% } %> <%= addr.postal_code || '' %><br>
+              <%= addr.country %><br>
+              <% if (addr.phone) { %><%= addr.phone %><% } %>
+            </address>
+            <div style="display:flex;gap:var(--space-sm);margin-top:var(--space-md);">
+              <form method="POST" action="/account/addresses/<%= addr.id %>/delete" onsubmit="return confirm('Delete this address?')">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit" class="btn btn-ghost btn-sm" style="color:#e74c3c;">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      <% } else { %>
+      <div class="empty-state">
+        <div class="empty-state__icon">◻</div>
+        <h2 class="empty-state__title">No addresses saved</h2>
+        <p class="empty-state__text">Save an address for faster checkout.</p>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

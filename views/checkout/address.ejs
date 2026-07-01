@@ -1,0 +1,215 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+<main>
+<div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);max-width:900px;">
+
+  <!-- Progress steps -->
+  <div class="checkout-steps">
+    <div class="checkout-step active">
+      <span class="step-num">1</span>
+      <span class="step-label">Shipping</span>
+    </div>
+    <div class="checkout-step-line"></div>
+    <div class="checkout-step">
+      <span class="step-num">2</span>
+      <span class="step-label">Review</span>
+    </div>
+    <div class="checkout-step-line"></div>
+    <div class="checkout-step">
+      <span class="step-num">3</span>
+      <span class="step-label">Payment</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 320px;gap:var(--space-2xl);align-items:start;">
+    <!-- Address form -->
+    <div>
+      <h1 style="font-family:var(--font-serif);font-size:1.8rem;font-weight:300;margin-bottom:var(--space-2xl);">Shipping Address</h1>
+
+      <!-- Saved addresses -->
+      <% if (addresses && addresses.length) { %>
+      <div style="margin-bottom:var(--space-2xl);">
+        <h2 style="font-size:0.85rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ash);margin-bottom:var(--space-md);">Saved Addresses</h2>
+        <div class="saved-addresses-grid">
+          <% addresses.forEach(addr => { %>
+          <label class="saved-address-card">
+            <input type="radio" name="savedAddress" value="<%= addr.id %>" <%= addr.is_default?'checked':'' %>
+                   onchange="selectSavedAddress(<%= addr.id %>)">
+            <div class="saved-address-content">
+              <strong><%= addr.first_name %> <%= addr.last_name %></strong>
+              <p style="font-size:0.8rem;color:var(--ash);margin-top:0.25rem;line-height:1.6;">
+                <%= addr.address_line_1 %><br>
+                <%= addr.city %><% if (addr.province) { %>, <%= addr.province %><% } %> <%= addr.postal_code||'' %><br>
+                <%= addr.country %>
+              </p>
+            </div>
+            <div class="saved-address-check">✓</div>
+          </label>
+          <% }) %>
+          <label class="saved-address-card" id="new-address-card">
+            <input type="radio" name="savedAddress" value="" onchange="selectNewAddress()">
+            <div class="saved-address-content">
+              <strong>+ New Address</strong>
+              <p style="font-size:0.8rem;color:var(--silver);margin-top:0.25rem;">Enter a different address</p>
+            </div>
+          </label>
+        </div>
+      </div>
+      <% } %>
+
+      <form method="POST" action="/checkout/review" id="checkout-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="addressId" id="address-id-input" value="<%= addresses && addresses[0] ? addresses[0].id : '' %>">
+
+        <!-- New address fields -->
+        <div id="new-address-fields" style="<%= addresses && addresses.length ? 'display:none;' : '' %>">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);">
+            <div class="form-group">
+              <label class="form-label">First Name *</label>
+              <input class="form-control" name="firstName" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name *</label>
+              <input class="form-control" name="lastName" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Company (optional)</label>
+            <input class="form-control" name="company">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Street Address *</label>
+            <input class="form-control" name="addressLine1" placeholder="Unit/House number and street" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Apartment, Complex, etc.</label>
+            <input class="form-control" name="addressLine2">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-md);">
+            <div class="form-group">
+              <label class="form-label">City *</label>
+              <input class="form-control" name="city" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Province</label>
+              <select class="form-control" name="province">
+                <option value="">Select…</option>
+                <% ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'].forEach(p => { %>
+                <option><%= p %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Postal Code</label>
+              <input class="form-control" name="postalCode" maxlength="10">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Country</label>
+            <input class="form-control" name="country" value="South Africa">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input class="form-control" name="phone" type="tel" placeholder="+27 ...">
+          </div>
+        </div>
+
+        <!-- Order notes -->
+        <div class="form-group" style="margin-top:var(--space-xl);">
+          <label class="form-label">Order Notes (optional)</label>
+          <textarea class="form-control" name="customerNotes" rows="3" placeholder="Any special instructions for delivery…" style="min-height:80px;"></textarea>
+        </div>
+
+        <!-- Discount -->
+        <div class="form-group">
+          <label class="form-label">Discount Code</label>
+          <div style="display:flex;gap:var(--space-sm);">
+            <input class="form-control" name="discountCode" id="discount-input" placeholder="Enter code…" style="flex:1;">
+            <button type="button" class="btn btn-outline" style="white-space:nowrap;" onclick="applyDiscount()">Apply</button>
+          </div>
+          <div id="discount-msg" style="font-size:0.8rem;margin-top:0.35rem;"></div>
+        </div>
+
+        <button type="submit" class="btn btn-gold btn-full" style="margin-top:var(--space-xl);">Continue to Review →</button>
+      </form>
+    </div>
+
+    <!-- Cart summary -->
+    <div class="cart-summary" style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-xl);position:sticky;top:90px;">
+      <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:400;margin-bottom:var(--space-lg);padding-bottom:var(--space-md);border-bottom:1px solid var(--border);">Your Order</h2>
+      <% let subtotal = 0; %>
+      <% (items||[]).forEach(item => { %>
+      <% const lineTotal = parseFloat(item.unit_price) * item.quantity; subtotal += lineTotal; %>
+      <div style="display:flex;gap:var(--space-md);align-items:center;margin-bottom:var(--space-md);">
+        <% if (item.primary_image||item.variant_image) { %>
+          <img src="<%= item.primary_image||item.variant_image %>" style="width:52px;height:52px;object-fit:cover;border-radius:var(--radius-sm);">
+        <% } else { %>
+          <div style="width:52px;height:52px;background:var(--pearl);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;">🏛</div>
+        <% } %>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:0.85rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><%= item.product_name %></div>
+          <div style="font-size:0.75rem;color:var(--silver);">Qty: <%= item.quantity %></div>
+        </div>
+        <div style="font-size:0.9rem;font-weight:600;white-space:nowrap;"><%= formatCurrency(lineTotal) %></div>
+      </div>
+      <% }) %>
+      <hr class="divider">
+      <div style="display:flex;justify-content:space-between;font-size:0.9rem;color:var(--ash);margin-bottom:0.5rem;"><span>Subtotal</span><span><%= formatCurrency(subtotal) %></span></div>
+      <div style="display:flex;justify-content:space-between;font-size:0.9rem;color:var(--ash);margin-bottom:0.5rem;">
+        <span>Shipping</span>
+        <span><%= subtotal >= (parseFloat(process.env.FREE_SHIPPING_THRESHOLD)||2500) ? 'FREE' : formatCurrency(parseFloat(process.env.SHIPPING_COST)||120) %></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-weight:700;font-size:1rem;margin-top:var(--space-md);padding-top:var(--space-md);border-top:1px solid var(--border);">
+        <span>Estimated Total</span>
+        <span style="color:var(--gold);">
+          <% const shipping = subtotal >= (parseFloat(process.env.FREE_SHIPPING_THRESHOLD)||2500) ? 0 : (parseFloat(process.env.SHIPPING_COST)||120); %>
+          <%= formatCurrency(subtotal + shipping) %>
+        </span>
+      </div>
+      <div style="margin-top:var(--space-lg);text-align:center;font-size:0.72rem;color:var(--silver);">🔒 256-bit SSL secured</div>
+    </div>
+  </div>
+</div>
+</main>
+
+<style>
+.checkout-steps { display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-2xl);gap:0; }
+.checkout-step { display:flex;align-items:center;gap:0.5rem;opacity:0.4; }
+.checkout-step.active { opacity:1; }
+.checkout-step.done { opacity:0.7; }
+.step-num { width:28px;height:28px;border-radius:50%;background:var(--obsidian);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700; }
+.checkout-step.active .step-num { background:var(--gold); }
+.step-label { font-size:0.8rem;font-weight:600;letter-spacing:0.05em;color:var(--obsidian); }
+.checkout-step-line { flex:1;max-width:80px;height:1px;background:var(--border);margin:0 var(--space-md); }
+.saved-addresses-grid { display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);margin-bottom:var(--space-xl); }
+.saved-address-card { border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-md);cursor:pointer;position:relative;transition:border-color 0.15s;display:block; }
+.saved-address-card:has(input:checked) { border-color:var(--gold); }
+.saved-address-card input[type=radio] { position:absolute;opacity:0; }
+.saved-address-check { position:absolute;top:var(--space-sm);right:var(--space-sm);width:20px;height:20px;border-radius:50%;background:var(--gold);color:white;display:none;align-items:center;justify-content:center;font-size:0.65rem; }
+.saved-address-card:has(input:checked) .saved-address-check { display:flex; }
+</style>
+
+<%- include('../partials/footer') %>
+<script>
+function selectSavedAddress(id) {
+  document.getElementById('address-id-input').value = id;
+  document.getElementById('new-address-fields').style.display = 'none';
+}
+function selectNewAddress() {
+  document.getElementById('address-id-input').value = '';
+  document.getElementById('new-address-fields').style.display = 'block';
+}
+async function applyDiscount() {
+  const code = document.getElementById('discount-input').value.trim();
+  const msg  = document.getElementById('discount-msg');
+  if (!code) return;
+  try {
+    const res  = await fetch('/checkout/validate-discount', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({code}) });
+    const data = await res.json();
+    if (data.valid) { msg.style.color = '#27ae60'; msg.textContent = `✓ ${data.message} (−${data.display})`; }
+    else            { msg.style.color = '#c0392b'; msg.textContent = data.message; }
+  } catch(e) { msg.style.color = '#c0392b'; msg.textContent = 'Could not validate code.'; }
+}
+</script>
+</body></html>

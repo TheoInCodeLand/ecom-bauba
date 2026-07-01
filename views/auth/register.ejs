@@ -1,0 +1,96 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+
+<main>
+<section style="min-height:85vh;display:flex;align-items:center;justify-content:center;padding:var(--space-2xl) var(--space-md);">
+  <div style="width:100%;max-width:500px;">
+    <div style="text-align:center;margin-bottom:var(--space-2xl);">
+      <a href="/" class="nav-logo" style="display:inline-block;margin-bottom:var(--space-lg);">Maison<span style="color:var(--gold)">.</span>Luxe</a>
+      <h1 style="font-family:var(--font-serif);font-size:2rem;font-weight:300;margin-bottom:var(--space-sm);">Create Account</h1>
+      <p style="color:var(--silver);font-size:0.9rem;">Join the Maison Luxe community</p>
+    </div>
+
+    <div class="card">
+      <div class="card-body" style="padding:var(--space-2xl);">
+        <form method="POST" action="/auth/register" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);">
+            <div class="form-group">
+              <label class="form-label" for="firstName">First Name</label>
+              <input class="form-control" type="text" name="firstName" id="firstName" required autocomplete="given-name" placeholder="Jane">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="lastName">Last Name</label>
+              <input class="form-control" type="text" name="lastName" id="lastName" required autocomplete="family-name" placeholder="Doe">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input class="form-control" type="email" name="email" id="email" required autocomplete="email" placeholder="your@email.com">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div style="position:relative;">
+              <input class="form-control" type="password" name="password" id="password" required minlength="8" autocomplete="new-password" placeholder="Min. 8 characters">
+              <button type="button" id="toggle-pw" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--silver);font-size:0.8rem;">Show</button>
+            </div>
+            <div id="pw-strength" style="margin-top:0.5rem;height:3px;border-radius:2px;background:var(--border);overflow:hidden;">
+              <div id="pw-strength-bar" style="height:100%;width:0;border-radius:2px;transition:all 0.3s;"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">Confirm Password</label>
+            <input class="form-control" type="password" name="confirmPassword" id="confirmPassword" required autocomplete="new-password" placeholder="••••••••">
+          </div>
+
+          <label style="display:flex;gap:var(--space-sm);align-items:flex-start;margin-bottom:var(--space-lg);cursor:pointer;">
+            <input type="checkbox" name="newsletterOptIn" style="margin-top:3px;accent-color:var(--gold);">
+            <span style="font-size:0.8rem;color:var(--silver);">Subscribe to our newsletter for new arrivals and exclusive offers</span>
+          </label>
+
+          <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+
+          <p style="text-align:center;font-size:0.75rem;color:var(--silver);margin-top:var(--space-md);">
+            By creating an account, you agree to our
+            <a href="/privacy-policy" style="color:var(--gold);">Privacy Policy</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:var(--space-lg);color:var(--silver);font-size:0.875rem;">
+      Already have an account? <a href="/auth/login" style="color:var(--gold)">Sign in</a>
+    </p>
+  </div>
+</section>
+</main>
+
+<%- include('../partials/footer') %>
+<script>
+document.getElementById('toggle-pw')?.addEventListener('click', function() {
+  const pw = document.getElementById('password');
+  pw.type = pw.type === 'text' ? 'password' : 'text';
+  this.textContent = pw.type === 'text' ? 'Hide' : 'Show';
+});
+
+// Password strength indicator
+document.getElementById('password')?.addEventListener('input', function() {
+  const val = this.value;
+  const bar = document.getElementById('pw-strength-bar');
+  let strength = 0;
+  if (val.length >= 8)  strength++;
+  if (/[A-Z]/.test(val)) strength++;
+  if (/[0-9]/.test(val)) strength++;
+  if (/[^A-Za-z0-9]/.test(val)) strength++;
+  const colors = ['', '#e74c3c', '#f39c12', '#2ecc71', '#27ae60'];
+  const widths  = ['0%', '25%', '50%', '75%', '100%'];
+  bar.style.width = widths[strength];
+  bar.style.background = colors[strength];
+});
+</script>
+</body></html>

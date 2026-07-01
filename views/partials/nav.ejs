@@ -1,0 +1,210 @@
+<%
+// Build nav categories from store tree
+let navCats = [];
+try {
+  const CategoryModel = require('../models/categoryModel');
+  // navCats loaded by middleware — use res.locals or pass in
+} catch(e) {}
+%>
+
+<% if (locals.store && locals.store.announcement_banner_active === 'true' && locals.store.announcement_banner_text) { %>
+<div class="announcement-bar">
+  <%= store.announcement_banner_text %>
+</div>
+<% } %>
+
+<header class="site-header" id="site-header">
+  <div class="container">
+    <nav class="nav-inner">
+      <!-- Hamburger (mobile) -->
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Logo -->
+      <a href="/" class="nav-logo">Maison<span>.</span>Luxe</a>
+
+      <!-- Centre nav links -->
+      <ul class="nav-links">
+        <% (navTree || []).forEach(dept => { %>
+        <li class="<%= dept.children && dept.children.length ? 'has-mega' : '' %>">
+          <a href="/category/<%= dept.slug %>" class="<%= typeof category !== 'undefined' && (category.id === dept.id || category.parent_id === dept.id) ? 'active' : '' %>"><%= dept.name %></a>
+          <% if (dept.children && dept.children.length) { %>
+          <div class="mega-menu">
+            <div class="mega-menu-inner">
+              <% dept.children.forEach(cat => { %>
+              <div class="mega-col">
+                <h4><a href="/category/<%= cat.slug %>"><%= cat.name %></a></h4>
+                <ul>
+                  <% (cat.children || []).forEach(sub => { %>
+                  <li><a href="/category/<%= sub.slug %>"><%= sub.name %></a></li>
+                  <% }) %>
+                </ul>
+              </div>
+              <% }) %>
+              <div class="mega-col mega-shop-all" style="display:flex;align-items:end;justify-content:flex-end;">
+                <a href="/category/<%= dept.slug %>" style="font-weight:600;color:var(--gold);text-decoration:underline;text-underline-offset:4px;">Shop All <%= dept.name %> &rarr;</a>
+              </div>
+            </div>
+          </div>
+          <% } %>
+        </li>
+        <% }) %>
+      </ul>
+
+      <!-- Right actions -->
+      <div class="nav-actions">
+        <!-- Search -->
+        <div class="nav-search">
+          <svg class="nav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input type="text" placeholder="Search..." id="nav-search-input" autocomplete="off" aria-label="Search products">
+          <div id="search-autocomplete" style="display:none;position:absolute;top:calc(100%+4px);left:0;right:0;background:white;border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-lg);z-index:200;max-height:320px;overflow-y:auto;"></div>
+        </div>
+
+        <!-- Wishlist -->
+        <% if (isAuthenticated) { %>
+        <a href="/wishlist" class="nav-icon-btn" title="Wishlist">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+        </a>
+        <% } %>
+
+        <!-- Cart -->
+        <a href="/cart" class="nav-icon-btn" title="Cart" id="nav-cart">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 0 1-8 0" />
+          </svg>
+          <span class="cart-badge" id="cart-count"><%= cartCount || 0 %></span>
+        </a>
+
+        <!-- Account -->
+        <% if (isAuthenticated) { %>
+        <a href="<%= isOwner ? '/admin' : '/account' %>" class="nav-icon-btn" title="Account">
+          <% if (user && user.avatarUrl) { %>
+          <img src="<%= user.avatarUrl %>" alt="<%= user.firstName %>" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);">
+          <% } else { %>
+          <svg viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <% } %>
+        </a>
+        <% } else { %>
+        <a href="/auth/login" class="btn btn-outline btn-sm">Sign In</a>
+        <% } %>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Mobile Nav Overlay -->
+<div class="overlay" id="nav-overlay"></div>
+<nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <span class="nav-logo">Maison<span>.</span>Luxe</span>
+    <button class="hamburger open" id="mobile-close">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <ul class="mobile-nav-links">
+    <li><a href="/">Home</a></li>
+    <% (navTree || []).forEach(dept => { %>
+    <li><a href="/category/<%= dept.slug %>"><%= dept.name %></a></li>
+    <% }) %>
+    <% if (isAuthenticated) { %>
+    <li><a href="/wishlist">Wishlist</a></li>
+    <li><a href="<%= isOwner ? '/admin' : '/account' %>">My Account</a></li>
+    <li><a href="/orders">My Orders</a></li>
+    <li><a href="/auth/logout">Sign Out</a></li>
+    <% } else { %>
+    <li><a href="/auth/login">Sign In</a></li>
+    <li><a href="/auth/register">Create Account</a></li>
+    <% } %>
+    <li><a href="/cart">Cart (<%= cartCount || 0 %>)</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</nav>
+
+<script>
+  // Mobile nav
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  const overlay = document.getElementById('nav-overlay');
+  const mobileClose = document.getElementById('mobile-close');
+
+  function openNav() {
+    mobileNav.classList.add('open');
+    overlay.classList.add('active');
+    hamburger.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeNav() {
+    mobileNav.classList.remove('open');
+    overlay.classList.remove('active');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+
+  hamburger?.addEventListener('click', openNav);
+  mobileClose?.addEventListener('click', closeNav);
+  overlay?.addEventListener('click', closeNav);
+
+  // Sticky header shadow
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => header?.classList.toggle('scrolled', window.scrollY > 10), {
+    passive: true
+  });
+
+  // Search autocomplete
+  const searchInput = document.getElementById('nav-search-input');
+  const autocomplete = document.getElementById('search-autocomplete');
+  let debounceTimer;
+
+  searchInput?.addEventListener('input', (e) => {
+    clearTimeout(debounceTimer);
+    const q = e.target.value.trim();
+    if (q.length < 2) {
+      autocomplete.style.display = 'none';
+      return;
+    }
+    debounceTimer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/search/autocomplete?q=${encodeURIComponent(q)}`);
+        const results = await res.json();
+        if (!results.length) {
+          autocomplete.style.display = 'none';
+          return;
+        }
+        autocomplete.innerHTML = results.map(r => `
+        <a href="/products/${r.slug}" style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 1rem;border-bottom:1px solid var(--border);transition:background 0.15s;">
+          ${r.image ? `<img src="${r.image}" style="width:40px;height:40px;object-fit:cover;border-radius:2px;">` : '<div style="width:40px;height:40px;background:var(--pearl);border-radius:2px;"></div>'}
+          <div>
+            <div style="font-size:0.85rem;color:var(--obsidian)">${r.name}</div>
+            <div style="font-size:0.75rem;color:var(--silver)">R ${parseFloat(r.base_price).toFixed(2)}</div>
+          </div>
+        </a>`).join('');
+        autocomplete.style.display = 'block';
+      } catch (e) {}
+    }, 300);
+  });
+
+  searchInput?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      window.location.href = `/search?q=${encodeURIComponent(searchInput.value.trim())}`;
+    }
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.nav-search')) {
+      autocomplete.style.display = 'none';
+    }
+  });
+</script>

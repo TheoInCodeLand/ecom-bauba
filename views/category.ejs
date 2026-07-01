@@ -1,0 +1,133 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main>
+<div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);">
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" style="margin-bottom:var(--space-xl);font-size:0.8rem;color:var(--silver);display:flex;gap:0.5rem;align-items:center;">
+    <a href="/" style="color:var(--ash);text-decoration:none;">Home</a>
+    <% if (breadcrumb && breadcrumb.length) { %>
+      <% breadcrumb.forEach(crumb => { %>
+        <span>/</span>
+        <a href="/category/<%= crumb.slug %>" class="<%= crumb.id === category.id ? 'active' : '' %>" style="color:<%= crumb.id === category.id ? 'var(--obsidian)' : 'var(--ash)' %>;text-decoration:none;font-weight:<%= crumb.id === category.id ? '600' : 'normal' %>;">
+          <%= crumb.name %>
+        </a>
+      <% }) %>
+    <% } %>
+  </nav>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-xl);">
+    <div>
+      <h1 style="font-family:var(--font-serif);font-size:2rem;font-weight:300;margin-bottom:0.25rem;">
+        <%= category ? category.name : 'Category' %>
+      </h1>
+      <% if (category && category.description) { %>
+        <p style="color:var(--silver);font-size:0.9rem;max-width:600px;"><%= category.description %></p>
+      <% } else { %>
+        <p style="color:var(--silver);font-size:0.85rem;"><%= total || 0 %> item<%= total !== 1 ? 's' : '' %></p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Subcategories -->
+  <% if (children && children.length) { %>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:1rem;margin-bottom:var(--space-3xl);">
+      <% children.forEach(child => { %>
+        <a href="/category/<%= child.slug %>" class="category-card" style="border:1px solid var(--border);padding:var(--space-xl);text-align:center;border-radius:var(--radius-md);background:var(--white);transition:border-color 0.2s, box-shadow 0.2s;text-decoration:none;">
+          <h3 style="font-family:var(--font-sans);font-size:0.9rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--obsidian);"><%= child.name %></h3>
+        </a>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:var(--space-2xl);align-items:start;">
+
+    <!-- Sidebar Filters -->
+    <aside class="shop-sidebar">
+      <form method="GET" action="/category/<%= category.slug %>" id="filter-form">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-lg);">
+          <h3 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:400;">Filters</h3>
+          <a href="/category/<%= category.slug %>" style="font-size:0.75rem;color:var(--silver);">Clear all</a>
+        </div>
+
+        <!-- Price Range -->
+        <div class="filter-group">
+          <div class="filter-group__title">Price Range</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);">
+            <div>
+              <label class="form-label" style="font-size:0.65rem;">Min (R)</label>
+              <input class="form-control" type="number" name="minPrice" value="<%= filters && filters.minPrice ? filters.minPrice : '' %>" placeholder="0" style="padding:0.5rem;">
+            </div>
+            <div>
+              <label class="form-label" style="font-size:0.65rem;">Max (R)</label>
+              <input class="form-control" type="number" name="maxPrice" value="<%= filters && filters.maxPrice ? filters.maxPrice : '' %>" placeholder="Any" style="padding:0.5rem;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Sort -->
+        <div class="filter-group">
+          <div class="filter-group__title">Sort By</div>
+          <select class="form-control" name="sort" onchange="this.form.submit()" style="padding:0.5rem;">
+            <option value="newest" <%= filters && filters.sort==='newest'?'selected':'' %>>Newest First</option>
+            <option value="price_asc" <%= filters && filters.sort==='price_asc'?'selected':'' %>>Price: Low to High</option>
+            <option value="price_desc" <%= filters && filters.sort==='price_desc'?'selected':'' %>>Price: High to Low</option>
+            <option value="bestselling" <%= filters && filters.sort==='bestselling'?'selected':'' %>>Bestselling</option>
+            <option value="rating" <%= filters && filters.sort==='rating'?'selected':'' %>>Highest Rated</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" style="margin-top:var(--space-md);">Apply Filters</button>
+      </form>
+    </aside>
+
+    <!-- Products -->
+    <div>
+      <% if (products && products.length) { %>
+      <div class="product-grid">
+        <% products.forEach(product => { %>
+          <%- include('partials/product-card', { product }) %>
+        <% }) %>
+      </div>
+
+      <!-- Pagination -->
+      <% if (pagination && pagination.totalPages > 1) { %>
+      <div class="pagination">
+        <% if (pagination.hasPrev) { %>
+          <a href="?page=<%= pagination.prevPage %>&sort=<%= filters && filters.sort ? filters.sort : 'newest' %>" class="page-btn">‹</a>
+        <% } %>
+        <% for (let i=1; i<=pagination.totalPages; i++) { %>
+          <a href="?page=<%= i %>&sort=<%= filters && filters.sort ? filters.sort : 'newest' %>"
+             class="page-btn <%= pagination.page === i ? 'active' : '' %>"><%= i %></a>
+        <% } %>
+        <% if (pagination.hasNext) { %>
+          <a href="?page=<%= pagination.nextPage %>&sort=<%= filters && filters.sort ? filters.sort : 'newest' %>" class="page-btn">›</a>
+        <% } %>
+      </div>
+      <% } %>
+
+      <% } else { %>
+      <div class="empty-state">
+        <div class="empty-state__icon">🔍</div>
+        <h2 class="empty-state__title">No products found</h2>
+        <p class="empty-state__text">There are no products in this category yet.</p>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+</main>
+
+<style>
+.shop-sidebar { position:sticky;top:90px; }
+.filter-group { border-top:1px solid var(--border);padding:var(--space-lg) 0; }
+.filter-group__title { font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--ash);margin-bottom:var(--space-md); }
+.filter-option { display:flex;align-items:center;gap:0.5rem;padding:0.25rem 0;cursor:pointer;font-size:0.85rem;color:var(--ash); }
+.filter-option input[type="radio"] { accent-color:var(--gold); }
+.category-card:hover { border-color:var(--gold); box-shadow:var(--shadow-sm); }
+@media(max-width:768px){ .shop-sidebar { display:none; } }
+</style>
+
+<%- include('partials/footer') %>
+</body></html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title || 'Admin | Maison Luxe' %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css">
+  <style>
+    :root { --sidebar-w: 240px; }
+    /* Reset global body flex so admin grid layout is not collapsed */
+    body { background: #f4f4f6; display:block; width:100%; }
+    .admin-layout { display:grid; grid-template-columns:var(--sidebar-w) 1fr; min-height:100vh; width:100%; }
+    .admin-sidebar {
+      position:fixed; top:0; left:0; bottom:0; width:var(--sidebar-w);
+      background:var(--obsidian); color:var(--white);
+      display:flex; flex-direction:column; z-index:100; overflow-y:auto;
+    }
+    .admin-sidebar-logo {
+      padding:1.5rem 1.5rem 1rem;
+      font-family:var(--font-serif); font-size:1.3rem; font-weight:300;
+      color:var(--white); border-bottom:1px solid rgba(255,255,255,0.06);
+      margin-bottom:0.5rem;
+    }
+    .admin-sidebar-logo span { color:var(--gold); }
+    .admin-sidebar-label {
+      padding:0.75rem 1.5rem 0.35rem;
+      font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase;
+      color:rgba(255,255,255,0.3); font-weight:600;
+    }
+    .admin-nav a {
+      display:flex; align-items:center; gap:0.75rem;
+      padding:0.65rem 1.5rem; font-size:0.82rem; color:rgba(255,255,255,0.6);
+      transition:all 0.15s; border-left:2px solid transparent;
+    }
+    .admin-nav a:hover, .admin-nav a.active {
+      color:var(--white); background:rgba(255,255,255,0.06); border-left-color:var(--gold);
+    }
+    .admin-nav a svg { opacity:0.5; flex-shrink:0; }
+    .admin-nav a:hover svg, .admin-nav a.active svg { opacity:1; }
+    .admin-main { grid-column: 2; padding:2rem; min-height:100vh; }
+    .admin-topbar {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border);
+    }
+    .admin-topbar h1 { font-family:var(--font-serif); font-size:1.6rem; font-weight:300; }
+    .admin-stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.25rem; margin-bottom:2rem; }
+    .admin-stat {
+      background:white; border:1px solid var(--border); border-radius:var(--radius-md);
+      padding:1.25rem 1.5rem; position:relative; overflow:hidden;
+    }
+    .admin-stat::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--gold); }
+    .admin-stat__label { font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--silver); font-weight:600; margin-bottom:0.5rem; }
+    .admin-stat__value { font-family:var(--font-serif); font-size:2rem; font-weight:300; color:var(--obsidian); }
+    .admin-stat__sub { font-size:0.75rem; color:var(--silver); margin-top:0.25rem; }
+    .admin-card { background:white; border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; margin-bottom:1.5rem; }
+    .admin-card-header { padding:1rem 1.5rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+    .admin-card-header h2 { font-family:var(--font-serif); font-size:1.1rem; font-weight:400; }
+    .admin-card-body { padding:1.5rem; }
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">Maison<span>.</span>Luxe <span style="font-size:0.65rem;color:rgba(255,255,255,0.3);display:block;margin-top:2px;font-family:var(--font-sans);letter-spacing:0.1em;">ADMIN</span></div>
+
+    <div class="admin-sidebar-label">Overview</div>
+    <nav class="admin-nav">
+      <a href="/admin" class="<%= title && title.includes('Dashboard') ? 'active' : '' %>">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+    </nav>
+
+    <div class="admin-sidebar-label">Catalogue</div>
+    <nav class="admin-nav">
+      <a href="/admin/products" class="<%= title && title.includes('Product') ? 'active' : '' %>">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>
+        Products
+      </a>
+      <a href="/admin/categories" class="<%= title && title.includes('Categor') ? 'active' : '' %>">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        Categories
+      </a>
+      <a href="/admin/inventory" class="<%= title && title.includes('Inventory') ? 'active' : '' %>">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/></svg>
+        Inventory
+      </a>
+    </nav>
+
+    <div class="admin-sidebar-label">Commerce</div>
+    <nav class="admin-nav">
+      <a href="/admin/orders" class="<%= title && title.includes('Order') ? 'active' : '' %>">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Orders
+      </a>
+      <a href="/admin/customers" class="<%= title && title.includes('Customer') ? 'active' : '' %>">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Customers
+      </a>
+    </nav>
+
+    <div class="admin-sidebar-label">Config</div>
+    <nav class="admin-nav">
+      <a href="/admin/settings" class="<%= title && title.includes('Settings') ? 'active' : '' %>">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+      <a href="/" style="margin-top:auto;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        View Store
+      </a>
+      <a href="/auth/logout" style="color:rgba(255,100,100,0.7)!important;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="admin-main">
+    <% if (flash && (flash.success?.length || flash.error?.length || flash.warning?.length)) { %>
+    <div style="margin-bottom:1.5rem;">
+      <%- include('../partials/flash') %>
+    </div>
+    <% } %>

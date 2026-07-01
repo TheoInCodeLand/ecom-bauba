@@ -1,0 +1,139 @@
+<%- include('../layout-start') %>
+<div class="admin-topbar">
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <a href="/admin/orders" style="color:var(--silver);font-size:0.85rem;">← Orders</a>
+    <h1>Order #<%= order.order_number %></h1>
+    <span class="status-pill status-<%= order.status %>"><%= order.status.replace(/_/g,' ') %></span>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start;">
+  <!-- Left -->
+  <div>
+    <!-- Update Status -->
+    <div class="admin-card" style="margin-bottom:1.5rem;">
+      <div class="admin-card-header"><h2>Update Order Status</h2></div>
+      <div class="admin-card-body">
+        <form method="POST" action="/admin/orders/<%= order.id %>/status">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label class="form-label">New Status</label>
+              <select class="form-control" name="status">
+                <% ['pending','payment_pending','processing','ready_to_ship','shipped','delivered','cancelled','refunded'].forEach(s => { %>
+                <option value="<%= s %>" <%= order.status===s?'selected':'' %>><%= s.replace(/_/g,' ') %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tracking Number</label>
+              <input class="form-control" name="trackingNumber" value="<%= order.tracking_number||'' %>" placeholder="Optional">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Shipping Carrier</label>
+            <input class="form-control" name="shippingCarrier" value="<%= order.shipping_carrier||'' %>" placeholder="e.g. Aramex, PostNet">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Internal Note (not shown to customer)</label>
+            <input class="form-control" name="note" placeholder="Optional internal note">
+          </div>
+          <button type="submit" class="btn btn-primary">Update Status</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Items -->
+    <div class="admin-card" style="margin-bottom:1.5rem;">
+      <div class="admin-card-header"><h2>Order Items</h2></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Product</th><th>Variant</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead>
+          <tbody>
+          <% (items||[]).forEach(item => { %>
+          <tr>
+            <td>
+              <% if (item.product_image_url) { %><img src="<%= item.product_image_url %>" style="width:48px;height:48px;object-fit:cover;border-radius:4px;"><% } else { %><div style="width:48px;height:48px;background:var(--pearl);border-radius:4px;"></div><% } %>
+            </td>
+            <td style="font-size:0.9rem;font-weight:600;"><%= item.product_name %><br><span style="font-size:0.72rem;color:var(--silver);">SKU: <%= item.sku||'N/A' %></span></td>
+            <td style="font-size:0.82rem;color:var(--ash);"><%= item.variant_description||'—' %></td>
+            <td><%= item.quantity %></td>
+            <td><%= formatCurrency(item.unit_price) %></td>
+            <td><strong><%= formatCurrency(item.line_total) %></strong></td>
+          </tr>
+          <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <% if (history && history.length) { %>
+    <div class="admin-card">
+      <div class="admin-card-header"><h2>Status History</h2></div>
+      <div class="admin-card-body" style="padding:1rem 1.5rem;">
+        <% history.forEach((h,i) => { %>
+        <div style="display:flex;gap:1rem;margin-bottom:1rem;">
+          <div style="width:8px;height:8px;border-radius:50%;background:<%= i===0?'var(--gold)':'var(--border)' %>;margin-top:6px;flex-shrink:0;"></div>
+          <div>
+            <span style="font-weight:600;text-transform:capitalize;font-size:0.85rem;"><%= h.status.replace(/_/g,' ') %></span>
+            <% if (h.note) { %>&nbsp;<span style="color:var(--silver);font-size:0.8rem;">— <%= h.note %></span><% } %>
+            <div style="font-size:0.72rem;color:var(--silver);margin-top:0.15rem;"><%= new Date(h.created_at).toLocaleString('en-ZA') %></div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+
+  <!-- Right summary -->
+  <div>
+    <div class="admin-card" style="margin-bottom:1.5rem;">
+      <div class="admin-card-header"><h2>Order Summary</h2></div>
+      <div class="admin-card-body">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;"><span style="color:var(--silver);">Subtotal</span><span><%= formatCurrency(order.subtotal) %></span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;"><span style="color:var(--silver);">Shipping</span><span><%= parseFloat(order.shipping_cost)===0?'FREE':formatCurrency(order.shipping_cost) %></span></div>
+        <% if (order.discount_amount > 0) { %><div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:#27ae60;"><span>Discount</span><span>−<%= formatCurrency(order.discount_amount) %></span></div><% } %>
+        <div style="display:flex;justify-content:space-between;padding-top:0.75rem;border-top:1px solid var(--border);font-weight:700;"><span>Total</span><span style="color:var(--gold);"><%= formatCurrency(order.total_amount) %></span></div>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+          <div style="font-size:0.75rem;color:var(--silver);margin-bottom:0.25rem;">Payment Status</div>
+          <span class="status-pill status-<%= order.payment_status %>"><%= order.payment_status %></span>
+          <% if (order.pf_payment_id) { %><div style="font-size:0.72rem;color:var(--silver);margin-top:0.5rem;">PayFast ID: <%= order.pf_payment_id %></div><% } %>
+          <% if (order.paid_at) { %><div style="font-size:0.72rem;color:var(--silver);">Paid: <%= new Date(order.paid_at).toLocaleString('en-ZA') %></div><% } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-card" style="margin-bottom:1.5rem;">
+      <div class="admin-card-header"><h2>Customer</h2></div>
+      <div class="admin-card-body" style="font-size:0.85rem;">
+        <div style="font-weight:600;margin-bottom:0.25rem;"><%= order.first_name||order.shipping_first_name %> <%= order.last_name||order.shipping_last_name %></div>
+        <div style="color:var(--silver);"><%= order.user_email %></div>
+        <% if (order.user_id) { %><a href="/admin/customers" style="color:var(--gold);font-size:0.8rem;margin-top:0.5rem;display:inline-block;">View customer →</a><% } %>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header"><h2>Shipping Address</h2></div>
+      <div class="admin-card-body">
+        <address style="font-style:normal;font-size:0.85rem;line-height:1.9;color:var(--ash);">
+          <strong><%= order.shipping_first_name %> <%= order.shipping_last_name %></strong><br>
+          <% if (order.shipping_company) { %><%= order.shipping_company %><br><% } %>
+          <%= order.shipping_address_line_1 %><br>
+          <% if (order.shipping_address_line_2) { %><%= order.shipping_address_line_2 %><br><% } %>
+          <%= order.shipping_city %>, <%= order.shipping_province||'' %> <%= order.shipping_postal_code||'' %><br>
+          <%= order.shipping_country %>
+        </address>
+        <% if (order.tracking_number) { %>
+        <div style="margin-top:0.75rem;padding:0.75rem;background:var(--pearl);border-radius:var(--radius-sm);">
+          <div style="font-size:0.72rem;color:var(--silver);margin-bottom:0.2rem;">Tracking</div>
+          <strong style="font-size:0.85rem;"><%= order.tracking_number %></strong>
+          <% if (order.shipping_carrier) { %><span style="color:var(--silver);font-size:0.8rem;"> via <%= order.shipping_carrier %></span><% } %>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../layout-end') %>

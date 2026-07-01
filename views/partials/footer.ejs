@@ -1,0 +1,90 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <!-- Brand column -->
+      <div>
+        <div class="footer-logo">Maison<span>.</span>Luxe</div>
+        <p class="footer-tagline">
+          Curated luxury fashion delivered to your door.<br>
+          Authentic pieces. Timeless style. Exceptional service.
+        </p>
+        <div class="footer-newsletter mt-lg">
+          <h4>Stay in the know</h4>
+          <form action="#" class="newsletter-form" method="post">
+            <input type="email" placeholder="Your email address" required>
+            <button type="submit">Join</button>
+          </form>
+        </div>
+        <div class="footer-social mt-md">
+          <% if (store && store.social_instagram) { %>
+          <a href="<%= store.social_instagram %>" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <% } %>
+          <a href="#" aria-label="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" aria-label="Pinterest">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83.19-.77 1.26-5.33 1.26-5.33s-.32-.64-.32-1.59c0-1.49.86-2.6 1.93-2.6.91 0 1.35.68 1.35 1.5 0 .91-.58 2.28-.88 3.55-.25 1.06.53 1.92 1.57 1.92 1.88 0 3.14-2.4 3.14-5.23 0-2.16-1.46-3.67-3.55-3.67-2.42 0-3.84 1.82-3.84 3.69 0 .73.28 1.51.63 1.94.07.08.08.15.06.23l-.23.97c-.04.15-.12.18-.28.11C7.6 13.55 7 12.02 7 10.59c0-2.9 2.11-5.56 6.09-5.56 3.2 0 5.69 2.28 5.69 5.32 0 3.18-2 5.73-4.77 5.73-.93 0-1.81-.48-2.11-1.06l-.57 2.15c-.21.79-.76 1.78-1.13 2.38.85.26 1.75.4 2.68.4 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Shop -->
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul class="footer-links">
+          <li><a href="/shop">All Products</a></li>
+          <li><a href="/shop?sort=newest">New Arrivals</a></li>
+          <li><a href="/shop?sort=bestselling">Bestsellers</a></li>
+          <li><a href="/shop?isLimited=true">Limited Edition</a></li>
+          <li><a href="/shop?sort=price_asc">Sale</a></li>
+        </ul>
+      </div>
+
+      <!-- Info -->
+      <div class="footer-col">
+        <h4>Information</h4>
+        <ul class="footer-links">
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/shipping-policy">Shipping Policy</a></li>
+          <li><a href="/returns-policy">Returns Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Account -->
+      <div class="footer-col">
+        <h4>My Account</h4>
+        <ul class="footer-links">
+          <% if (isAuthenticated) { %>
+          <li><a href="/account">Dashboard</a></li>
+          <li><a href="/orders">My Orders</a></li>
+          <li><a href="/wishlist">Wishlist</a></li>
+          <li><a href="/account/addresses">Addresses</a></li>
+          <li><a href="/auth/logout">Sign Out</a></li>
+          <% } else { %>
+          <li><a href="/auth/login">Sign In</a></li>
+          <li><a href="/auth/register">Create Account</a></li>
+          <li><a href="/cart">Cart</a></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span style="color:rgba(255,255,255,0.35)">
+        &copy; <%= new Date().getFullYear() %> <%= (store && store.store_name) || 'Maison Luxe' %>. All rights reserved.
+      </span>
+      <div style="display:flex;gap:var(--space-lg);">
+        <a href="/privacy-policy" style="color:rgba(255,255,255,0.35);font-size:0.75rem;transition:color 0.15s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">Privacy Policy</a>
+        <a href="/returns-policy" style="color:rgba(255,255,255,0.35);font-size:0.75rem;transition:color 0.15s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">Returns</a>
+      </div>
+      <div style="display:flex;gap:var(--space-sm);align-items:center;">
+        <span style="font-size:0.7rem;color:rgba(255,255,255,0.25);letter-spacing:0.1em;text-transform:uppercase;">Secured by</span>
+        <span style="color:var(--gold);font-size:0.7rem;font-weight:600;letter-spacing:0.1em;">PayFast</span>
+      </div>
+    </div>
+  </div>
+</footer>

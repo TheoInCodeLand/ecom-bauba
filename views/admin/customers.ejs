@@ -1,0 +1,56 @@
+<%- include('./layout-start') %>
+<div class="admin-topbar">
+  <h1>Customers</h1>
+</div>
+<div class="admin-card" style="margin-bottom:1.5rem;">
+  <div class="admin-card-body" style="padding:1rem 1.5rem;">
+    <form method="GET" style="display:flex;gap:1rem;">
+      <input class="form-control" name="search" value="<%= search %>" placeholder="Name or email…" style="max-width:300px;">
+      <button type="submit" class="btn btn-outline btn-sm">Search</button>
+      <% if (search) { %><a href="/admin/customers" class="btn btn-ghost btn-sm">Clear</a><% } %>
+    </form>
+  </div>
+</div>
+<div class="admin-card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Customer</th><th>Email</th><th>Joined</th><th>Orders</th><th>Total Spent</th><th>Points</th></tr></thead>
+      <tbody>
+      <% if (customers && customers.length) { %>
+        <% customers.forEach(c => { %>
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+              <% if (c.avatar_url) { %>
+                <img src="<%= c.avatar_url %>" style="width:34px;height:34px;border-radius:50%;object-fit:cover;">
+              <% } else { %>
+                <div style="width:34px;height:34px;border-radius:50%;background:var(--pearl);display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);color:var(--gold);font-size:1rem;"><%= (c.first_name||'?').charAt(0) %></div>
+              <% } %>
+              <div>
+                <strong style="font-size:0.9rem;"><%= c.first_name %> <%= c.last_name %></strong>
+                <% if (c.is_verified) { %><span style="font-size:0.65rem;color:#27ae60;margin-left:4px;">✓</span><% } %>
+              </div>
+            </div>
+          </td>
+          <td style="font-size:0.85rem;color:var(--ash);"><%= c.email %></td>
+          <td style="font-size:0.8rem;color:var(--silver);"><%= new Date(c.created_at).toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'}) %></td>
+          <td style="font-weight:600;"><%= c.order_count || 0 %></td>
+          <td><strong><%= formatCurrency(c.total_spent || 0) %></strong></td>
+          <td style="font-size:0.85rem;color:var(--ash);"><%= c.loyalty_points || 0 %></td>
+        </tr>
+        <% }) %>
+      <% } else { %>
+        <tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--silver);">No customers found.</td></tr>
+      <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% if (pagination && pagination.totalPages > 1) { %>
+<div class="pagination" style="margin-top:1.5rem;">
+  <% if (pagination.hasPrev) { %><a href="?page=<%= pagination.prevPage %>&search=<%= search %>" class="page-btn">‹</a><% } %>
+  <% for(let i=1;i<=pagination.totalPages;i++){ %><a href="?page=<%= i %>&search=<%= search %>" class="page-btn <%= pagination.page===i?'active':'' %>"><%= i %></a><% } %>
+  <% if (pagination.hasNext) { %><a href="?page=<%= pagination.nextPage %>&search=<%= search %>" class="page-btn">›</a><% } %>
+</div>
+<% } %>
+<%- include('./layout-end') %>

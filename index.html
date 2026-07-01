@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fafafa" />
+    <title>Rebill Checkout</title>
+    <meta
+      name="description"
+      content="Complete your subscription in just a few seconds with Rebill Checkout."
+    />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Confetti (success effect) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+      /* ============================================================
+         Design tokens (translated from the Next.js globals.css)
+         ============================================================ */
+      :root {
+        --background: oklch(0.98 0 0);
+        --foreground: oklch(0.12 0 0);
+        --card: oklch(1 0 0);
+        --card-foreground: oklch(0.12 0 0);
+        --primary: oklch(0.12 0 0);
+        --primary-foreground: oklch(0.98 0 0);
+        --secondary: oklch(0.94 0 0);
+        --muted: oklch(0.94 0 0);
+        --muted-foreground: oklch(0.45 0 0);
+        --accent: oklch(0.94 0 0);
+        --destructive: oklch(0.577 0.245 27.325);
+        --destructive-foreground: oklch(0.985 0 0);
+        --border: oklch(0.88 0 0);
+        --input: oklch(0.88 0 0);
+        --ring: oklch(0.12 0 0);
+        --radius: 0.5rem;
+        --radius-lg: var(--radius);
+        --font-sans: "Geist", system-ui, -apple-system, sans-serif;
+        --font-mono: "Geist Mono", ui-monospace, monospace;
+      }
+
+      html.dark {
+        --background: oklch(0.08 0 0);
+        --foreground: oklch(0.98 0 0);
+        --card: oklch(0.1 0 0);
+        --card-foreground: oklch(0.98 0 0);
+        --primary: oklch(0.98 0 0);
+        --primary-foreground: oklch(0.12 0 0);
+        --secondary: oklch(0.18 0 0);
+        --muted: oklch(0.18 0 0);
+        --muted-foreground: oklch(0.65 0 0);
+        --accent: oklch(0.18 0 0);
+        --destructive: oklch(0.5 0.2 25);
+        --destructive-foreground: oklch(0.98 0 0);
+        --border: oklch(0.2 0 0);
+        --input: oklch(0.2 0 0);
+        --ring: oklch(0.75 0 0);
+      }
+
+      /* ============================================================
+         Base
+         ============================================================ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        background: var(--background);
+      }
+
+      body {
+        background: var(--background);
+        color: var(--foreground);
+        font-family: var(--font-sans);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
+      }
+
+      code {
+        font-family: var(--font-mono);
+      }
+
+      /* ============================================================
+         Layout
+         ============================================================ */
+      .main {
+        min-height: 100vh;
+        background: var(--background);
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 1rem 1rem;
+        width: 100%;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 72rem;
+        margin: 0 auto;
+      }
+
+      .header {
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.25rem;
+        line-height: 1.15;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        text-wrap: balance;
+        color: var(--foreground);
+      }
+
+      .header p {
+        font-size: 1.125rem;
+        color: var(--muted-foreground);
+        text-wrap: pretty;
+      }
+
+      /* ============================================================
+         Checkout web component wrapper
+         ============================================================ */
+      .checkout-wrap {
+        position: relative;
+      }
+
+      rebill-checkout {
+        display: block;
+      }
+
+      /* ============================================================
+         Loading skeleton
+         ============================================================ */
+      .skeleton {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        background: var(--background);
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      .skeleton .group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding-top: 1rem;
+      }
+
+      .skeleton .field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .skeleton .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .bar {
+        background: var(--muted);
+        border-radius: var(--radius);
+      }
+      .bar-label {
+        height: 1rem;
+        width: 8rem;
+      }
+      .bar-label-sm {
+        height: 1rem;
+        width: 6rem;
+      }
+      .bar-input {
+        height: 3rem;
+        width: 100%;
+      }
+
+      .skeleton .summary {
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .skeleton .summary .line {
+        display: flex;
+        justify-content: space-between;
+      }
+      .bar-sum-a {
+        height: 1rem;
+        width: 6rem;
+      }
+      .bar-sum-b {
+        height: 1rem;
+        width: 8rem;
+      }
+      .bar-total-a {
+        height: 1.25rem;
+        width: 7rem;
+      }
+      .bar-total-b {
+        height: 1.25rem;
+        width: 9rem;
+      }
+
+      .skeleton .button-wrap {
+        padding-top: 1rem;
+      }
+      .bar-button {
+        height: 3rem;
+        width: 100%;
+      }
+
+      @keyframes pulse {
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      /* ============================================================
+         Public-key warning (placeholder + toast)
+         ============================================================ */
+      .warning-preview {
+        position: relative;
+      }
+      .warning-preview .img-wrap {
+        width: 100%;
+        opacity: 0.5;
+      }
+      .warning-preview img {
+        width: 100%;
+        height: auto;
+      }
+      .warning-preview .img-mobile {
+        display: block;
+      }
+      .warning-preview .img-desktop {
+        display: none;
+      }
+      @media (min-width: 768px) {
+        .warning-preview .img-mobile {
+          display: none;
+        }
+        .warning-preview .img-desktop {
+          display: block;
+        }
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        z-index: 9999;
+        max-width: 24rem;
+        background: var(--card);
+        color: var(--card-foreground);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+          0 4px 6px -4px rgb(0 0 0 / 0.1);
+        padding: 1rem 1.25rem;
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+      .toast.toast--error {
+        background: var(--destructive);
+        color: var(--destructive-foreground);
+        border-color: var(--destructive);
+      }
+      .toast .toast-body {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .toast .toast-title {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+      .toast .toast-text {
+        opacity: 0.9;
+      }
+      .toast code {
+        background: rgb(255 255 255 / 0.1);
+        padding: 0.1rem 0.3rem;
+        border-radius: 0.25rem;
+      }
+      .toast a {
+        color: inherit;
+        opacity: 0.9;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        transition: opacity 0.2s;
+      }
+      .toast a:hover {
+        opacity: 1;
+      }
+      .toast .toast-close {
+        background: none;
+        border: none;
+        color: currentColor;
+        opacity: 0.5;
+        cursor: pointer;
+        font-size: 1.1rem;
+        line-height: 1;
+        padding: 0;
+        margin-top: 0.15rem;
+      }
+      .toast .toast-close:hover {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="main">
+      <div class="container">
+        <!-- Header -->
+        <div class="header" id="header">
+          <h1 id="header-title">You&apos;re almost there!</h1>
+          <p id="header-subtitle">
+            Complete your subscription in just a few seconds
+          </p>
+        </div>
+
+        <!-- Checkout (rendered when a public key is configured) -->
+        <div class="checkout-wrap hidden" id="checkout-wrap">
+          <!-- Loading skeleton -->
+          <div class="skeleton" id="skeleton" aria-hidden="true">
+            <div class="group">
+              <div class="field">
+                <div class="bar bar-label"></div>
+                <div class="bar bar-input"></div>
+              </div>
+              <div class="field">
+                <div class="bar bar-label"></div>
+                <div class="bar bar-input"></div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <div class="bar bar-label-sm"></div>
+                  <div class="bar bar-input"></div>
+                </div>
+                <div class="field">
+                  <div class="bar bar-label-sm"></div>
+                  <div class="bar bar-input"></div>
+                </div>
+              </div>
+              <div class="field">
+                <div class="bar bar-label"></div>
+                <div class="bar bar-input"></div>
+              </div>
+            </div>
+            <div class="summary">
+              <div class="line">
+                <div class="bar bar-sum-a"></div>
+                <div class="bar bar-sum-b"></div>
+              </div>
+              <div class="line">
+                <div class="bar bar-total-a"></div>
+                <div class="bar bar-total-b"></div>
+              </div>
+            </div>
+            <div class="button-wrap">
+              <div class="bar bar-button"></div>
+            </div>
+          </div>
+          <!-- Rebill custom web component is injected here by JS -->
+        </div>
+
+        <!-- Public-key warning preview (shown when no public key) -->
+        <div class="warning-preview hidden" id="warning-preview">
+          <div class="img-wrap">
+            <img
+              class="img-mobile"
+              src="/rebill-placeholder-mobile.png"
+              alt="Rebill Checkout Preview"
+              width="1160"
+              height="1000"
+            />
+            <img
+              class="img-desktop"
+              src="/rebill-placeholder.png"
+              alt="Rebill Checkout Preview"
+              width="1160"
+              height="1000"
+            />
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Toast container -->
+    <div id="toast-root"></div>
+
+    <script type="module">
+      /* ============================================================
+         Configuration
+         Replace REBILL_PUBLIC_KEY with your Rebill public key.
+         Leave it empty to see the "public key required" warning.
+         ============================================================ */
+      const REBILL_PUBLIC_KEY = ""; // e.g. "pk_live_xxx"
+
+      const instantProduct = {
+        name: [{ language: "en", text: "Premium Subscription" }],
+        description: [{ language: "en", text: "Access to all premium features" }],
+        amount: 2999,
+        currency: "ARS",
+        deviceId: "fpt_9ec48794-95e9-47ba-8092-f86c1088b65a",
+      };
+
+      const checkoutCss = `.rebill-checkout {
+        border-radius: 0.75rem;
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      }`;
+
+      /* ============================================================
+         Toast helper
+         ============================================================ */
+      function showToast({ html, isError = false }) {
+        const root = document.getElementById("toast-root");
+        const toast = document.createElement("div");
+        toast.className = "toast" + (isError ? " toast--error" : "");
+
+        const body = document.createElement("div");
+        body.className = "toast-body";
+        body.innerHTML = html;
+
+        const close = document.createElement("button");
+        close.className = "toast-close";
+        close.setAttribute("aria-label", "Close");
+        close.textContent = "\u2715";
+        close.addEventListener("click", () => toast.remove());
+
+        toast.appendChild(body);
+        toast.appendChild(close);
+        root.appendChild(toast);
+        return toast;
+      }
+
+      /* ============================================================
+         Confetti (success effect)
+         ============================================================ */
+      function fireConfetti() {
+        if (typeof confetti !== "function") return;
+        const duration = 3000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+        const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+        const interval = setInterval(() => {
+          const timeLeft = animationEnd - Date.now();
+          if (timeLeft <= 0) return clearInterval(interval);
+          const particleCount = 50 * (timeLeft / duration);
+          confetti({
+            ...defaults,
+            particleCount,
+            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+          });
+          confetti({
+            ...defaults,
+            particleCount,
+            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+          });
+        }, 250);
+      }
+
+      /* ============================================================
+         Payment handlers
+         ============================================================ */
+      function handleSuccess(detail) {
+        console.log("[v0] Payment successful:", detail);
+        document.getElementById("header-title").style.display = "none";
+        document.getElementById("header-subtitle").textContent =
+          "Thank you for your subscription. You're all set!";
+        fireConfetti();
+      }
+
+      function handleError(detail) {
+        console.error("[v0] Payment error:", detail);
+        showToast({
+          isError: true,
+          html:
+            '<div class="toast-title">Payment failed</div>' +
+            '<p class="toast-text">' +
+            ((detail && detail.message) || "Something went wrong. Please try again.") +
+            "</p>",
+        });
+      }
+
+      /* ============================================================
+         Public-key warning
+         ============================================================ */
+      function showPublicKeyWarning() {
+        document.getElementById("warning-preview").classList.remove("hidden");
+        showToast({
+          html:
+            '<div class="toast-title">Rebill Public Key Required</div>' +
+            '<p class="toast-text">This implementation requires a Rebill Public Key to initialize the SDK. ' +
+            "Please add your <code>REBILL_PUBLIC_KEY</code> as an environment variable and redeploy.</p>" +
+            '<a href="https://docs.rebill.com/products/payments#api-keys-and-activation" ' +
+            'target="_blank" rel="noopener noreferrer">Learn how to get an Public key &rarr;</a>',
+        });
+      }
+
+      /* ============================================================
+         Initialize the Rebill checkout
+         ============================================================ */
+      async function initCheckout() {
+        const wrap = document.getElementById("checkout-wrap");
+        wrap.classList.remove("hidden");
+
+        // Create the custom web component element
+        const el = document.createElement("rebill-checkout");
+        el.setAttribute("public-key", REBILL_PUBLIC_KEY);
+        el.setAttribute("instant-product", JSON.stringify(instantProduct));
+        el.setAttribute("css", checkoutCss);
+        el.addEventListener("success", (e) => handleSuccess(e.detail));
+        el.addEventListener("error", (e) => handleError(e.detail));
+        wrap.appendChild(el);
+
+        try {
+          // Load the Rebill web components SDK, which registers <rebill-checkout>
+          await import("https://esm.sh/rebill-web-components-sdk");
+          // Give the component a moment to hydrate, then hide the skeleton
+          setTimeout(() => {
+            document.getElementById("skeleton").classList.add("hidden");
+          }, 1700);
+        } catch (error) {
+          console.error("[v0] Failed to load Rebill SDK:", error);
+          document.getElementById("skeleton").classList.add("hidden");
+        }
+      }
+
+      /* ============================================================
+         Boot
+         ============================================================ */
+      if (REBILL_PUBLIC_KEY) {
+        initCheckout();
+      } else {
+        showPublicKeyWarning();
+      }
+    </script>
+  </body>
+</html>

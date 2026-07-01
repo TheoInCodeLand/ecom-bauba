@@ -1,0 +1,95 @@
+<%- include('../layout-start') %>
+<div class="admin-topbar">
+  <h1>Products</h1>
+  <a href="/admin/products/new" class="btn btn-primary btn-sm">+ Add Product</a>
+</div>
+
+<!-- Search & Filter -->
+<div class="admin-card" style="margin-bottom:1.5rem;">
+  <div class="admin-card-body" style="padding:1rem 1.5rem;">
+    <form method="GET" action="/admin/products" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+      <input class="form-control" name="search" value="<%= search %>" placeholder="Search products…" style="max-width:280px;">
+      <select class="form-control" name="status" style="max-width:160px;" onchange="this.form.submit()">
+        <option value="">All Status</option>
+        <option value="active" <%= status==='active'?'selected':'' %>>Active</option>
+        <option value="inactive" <%= status==='inactive'?'selected':'' %>>Inactive</option>
+      </select>
+      <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+      <% if (search || status) { %><a href="/admin/products" class="btn btn-ghost btn-sm">Clear</a><% } %>
+    </form>
+  </div>
+</div>
+
+<div class="admin-card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:60px;"></th><th>Product</th><th>Price</th><th>Category</th><th>Status</th><th>Stock</th><th>Actions</th></tr></thead>
+      <tbody>
+      <% if (products && products.length) { %>
+        <% products.forEach(p => { %>
+        <tr>
+          <td>
+            <% if (p.primary_image) { %><img src="<%= p.primary_image %>" style="width:48px;height:48px;object-fit:cover;border-radius:var(--radius-sm);">
+            <% } else { %><div style="width:48px;height:48px;background:var(--pearl);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--silver);">🏛</div><% } %>
+          </td>
+          <td>
+            <strong style="font-size:0.9rem;"><%= p.name %></strong>
+            <% if (p.brand) { %><br><span style="font-size:0.72rem;color:var(--silver)"><%= p.brand %></span><% } %>
+            <br><span style="font-size:0.7rem;color:var(--silver)">SKU: <%= p.sku || 'N/A' %></span>
+          </td>
+          <td>
+            <strong><%= formatCurrency(p.base_price) %></strong>
+            <% if (p.compare_at_price && p.compare_at_price > p.base_price) { %>
+            <br><span style="font-size:0.75rem;color:var(--silver);text-decoration:line-through;"><%= formatCurrency(p.compare_at_price) %></span>
+            <% } %>
+          </td>
+          <td style="font-size:0.85rem;color:var(--ash);"><%= p.category_name || '—' %></td>
+          <td>
+            <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+              <input type="checkbox" <%= p.is_active?'checked':'' %>
+                     onchange="toggleProduct(<%= p.id %>, this)"
+                     style="accent-color:var(--gold);width:16px;height:16px;">
+              <span style="font-size:0.8rem;"><%= p.is_active ? 'Active' : 'Inactive' %></span>
+            </label>
+          </td>
+          <td>
+            <span style="font-size:0.85rem;font-weight:600;color:<%= p.stock_total<=0?'#c0392b':p.stock_total<=5?'#f39c12':'var(--obsidian)' %>">
+              <%= p.stock_total || 0 %>
+            </span>
+          </td>
+          <td>
+            <div style="display:flex;gap:0.5rem;">
+              <a href="/admin/products/<%= p.id %>/edit" class="btn btn-outline btn-sm">Edit</a>
+              <a href="/products/<%= p.slug %>" target="_blank" class="btn btn-ghost btn-sm" title="Preview">↗</a>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
+      <% } else { %>
+        <tr><td colspan="7" style="text-align:center;padding:3rem;color:var(--silver);">No products found.</td></tr>
+      <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Pagination -->
+<% if (pagination && pagination.totalPages > 1) { %>
+<div class="pagination" style="margin-top:1.5rem;">
+  <% if (pagination.hasPrev) { %><a href="?page=<%= pagination.prevPage %>&search=<%= search %>&status=<%= status %>" class="page-btn">‹</a><% } %>
+  <% for(let i=1;i<=pagination.totalPages;i++){ %><a href="?page=<%= i %>&search=<%= search %>&status=<%= status %>" class="page-btn <%= pagination.page===i?'active':'' %>"><%= i %></a><% } %>
+  <% if (pagination.hasNext) { %><a href="?page=<%= pagination.nextPage %>&search=<%= search %>&status=<%= status %>" class="page-btn">›</a><% } %>
+</div>
+<% } %>
+
+<script>
+async function toggleProduct(id, checkbox) {
+  try {
+    const res = await fetch(`/admin/products/${id}/toggle`, { method:'POST', headers:{'Content-Type':'application/json'} });
+    const data = await res.json();
+    if (!data.success) checkbox.checked = !checkbox.checked;
+    checkbox.nextElementSibling.textContent = data.isActive ? 'Active' : 'Inactive';
+  } catch(e) { checkbox.checked = !checkbox.checked; }
+}
+</script>
+<%- include('../layout-end') %>

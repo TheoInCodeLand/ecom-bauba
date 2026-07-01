@@ -1,0 +1,43 @@
+{
+  "name": "com",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:migrate": "node db/migrate.js",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-flash": "^0.1.1",
+    "connect-pg-simple": "^10.0.0",
+    "cookie-parser": "^1.4.7",
+    "csurf": "^1.11.0",
+    "dayjs": "^1.11.21",
+    "dotenv": "^17.4.2",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.2",
+    "helmet": "^8.2.0",
+    "morgan": "^1.11.0",
+    "multer": "^2.2.0",
+    "ngrok": "^5.0.0-beta.2",
+    "node-cron": "^4.5.0",
+    "nodemailer": "^9.0.1",
+    "nodemon": "^3.1.14",
+    "pg": "^8.22.0",
+    "sanitize-html": "^2.17.5",
+    "sharp": "^0.35.2",
+    "slugify": "^1.6.9",
+    "uuid": "^14.0.1",
+    "winston": "^3.19.0"
+  }
+}

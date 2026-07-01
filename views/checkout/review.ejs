@@ -1,0 +1,115 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+<main>
+<div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);max-width:900px;">
+
+  <!-- Progress steps -->
+  <div class="checkout-steps">
+    <div class="checkout-step done"><span class="step-num">✓</span><span class="step-label">Shipping</span></div>
+    <div class="checkout-step-line" style="background:var(--gold);"></div>
+    <div class="checkout-step active"><span class="step-num">2</span><span class="step-label">Review</span></div>
+    <div class="checkout-step-line"></div>
+    <div class="checkout-step"><span class="step-num">3</span><span class="step-label">Payment</span></div>
+  </div>
+
+  <h1 style="font-family:var(--font-serif);font-size:1.8rem;font-weight:300;margin-bottom:var(--space-2xl);">Review Your Order</h1>
+
+  <div style="display:grid;grid-template-columns:1fr 320px;gap:var(--space-2xl);align-items:start;">
+    <!-- Left -->
+    <div>
+      <!-- Items -->
+      <div class="card" style="margin-bottom:var(--space-xl);">
+        <div class="card-body">
+          <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:400;margin-bottom:var(--space-lg);">Items</h2>
+          <% (items||[]).forEach(item => { %>
+          <div style="display:flex;gap:var(--space-md);align-items:center;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
+            <% if (item.primary_image||item.variant_image) { %><img src="<%= item.primary_image||item.variant_image %>" style="width:60px;height:60px;object-fit:cover;border-radius:var(--radius-sm);">
+            <% } else { %><div style="width:60px;height:60px;background:var(--pearl);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;">🏛</div><% } %>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:0.9rem;"><%= item.product_name %></div>
+              <% if (item.attributes && item.attributes.length) { %>
+              <div style="font-size:0.75rem;color:var(--silver);">
+                <% item.attributes.filter(Boolean).forEach(a => { if (a && a.type) { %><%= a.type %>: <%= a.value %>&nbsp;<% }}) %>
+              </div>
+              <% } %>
+              <div style="font-size:0.75rem;color:var(--silver);">Qty: <%= item.quantity %></div>
+            </div>
+            <div style="font-weight:700;"><%= formatCurrency(parseFloat(item.unit_price) * item.quantity) %></div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Shipping address -->
+      <div class="card" style="margin-bottom:var(--space-xl);">
+        <div class="card-body">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-md);">
+            <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:400;">Delivery Address</h2>
+            <a href="/checkout/address" style="font-size:0.8rem;color:var(--gold);">Change</a>
+          </div>
+          <address style="font-style:normal;color:var(--ash);font-size:0.9rem;line-height:1.8;">
+            <strong style="color:var(--obsidian);"><%= shippingAddress.shippingFirstName %> <%= shippingAddress.shippingLastName %></strong><br>
+            <% if (shippingAddress.shippingCompany) { %><%= shippingAddress.shippingCompany %><br><% } %>
+            <%= shippingAddress.shippingAddressLine1 %><br>
+            <% if (shippingAddress.shippingAddressLine2) { %><%= shippingAddress.shippingAddressLine2 %><br><% } %>
+            <%= shippingAddress.shippingCity %><% if (shippingAddress.shippingProvince) { %>, <%= shippingAddress.shippingProvince %><% } %> <%= shippingAddress.shippingPostalCode||'' %><br>
+            <%= shippingAddress.shippingCountry %>
+          </address>
+        </div>
+      </div>
+
+      <!-- Discount info -->
+      <% if (discountInfo) { %>
+      <div style="background:#e8f5e9;border:1px solid #c8e6c9;border-radius:var(--radius-md);padding:var(--space-md) var(--space-lg);margin-bottom:var(--space-xl);">
+        <p style="font-size:0.85rem;color:#2e7d32;font-weight:600;">✓ Discount applied: <%= discountInfo.code %> — −<%= formatCurrency(discountInfo.amount) %></p>
+      </div>
+      <% } %>
+
+      <!-- Place order -->
+      <form method="POST" action="/checkout/place-order">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <p style="font-size:0.78rem;color:var(--silver);margin-bottom:var(--space-lg);line-height:1.7;">
+          By placing this order you agree to our <a href="/terms" style="color:var(--gold)">Terms of Service</a> and <a href="/privacy-policy" style="color:var(--gold)">Privacy Policy</a>. 
+          You will be redirected to PayFast for secure payment.
+        </p>
+        <button type="submit" class="btn btn-gold btn-full" style="font-size:1rem;padding:var(--space-lg);">
+          Place Order & Pay <span id="btn-total"><%= formatCurrency(typeof total !== 'undefined' ? total : 0) %></span> →
+        </button>
+      </form>
+    </div>
+
+    <!-- Right: Order summary -->
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-xl);position:sticky;top:90px;">
+      <h2 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:400;margin-bottom:var(--space-lg);padding-bottom:var(--space-md);border-bottom:1px solid var(--border);">Order Total</h2>
+      <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:var(--ash);"><span>Subtotal</span><span><%= formatCurrency(subtotal) %></span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:var(--ash);"><span>Shipping</span><span><%= parseFloat(shipping)===0 ? 'FREE' : formatCurrency(shipping) %></span></div>
+      <% if (discountAmount > 0) { %>
+      <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.9rem;color:#27ae60;"><span>Discount</span><span>−<%= formatCurrency(discountAmount) %></span></div>
+      <% } %>
+      <div style="display:flex;justify-content:space-between;padding-top:var(--space-md);border-top:1px solid var(--border);font-weight:700;font-size:1.1rem;">
+        <span>Total</span><span style="color:var(--gold);"><%= formatCurrency(total) %></span>
+      </div>
+      <div style="margin-top:var(--space-xl);display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:var(--silver);">🔒 256-bit SSL encryption</div>
+        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:var(--silver);">💳 Powered by PayFast</div>
+        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:var(--silver);">↩ 30-day easy returns</div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+<style>
+.checkout-steps { display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-2xl); }
+.checkout-step { display:flex;align-items:center;gap:0.5rem;opacity:0.4; }
+.checkout-step.active,.checkout-step.done { opacity:1; }
+.step-num { width:28px;height:28px;border-radius:50%;background:var(--obsidian);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700; }
+.checkout-step.active .step-num { background:var(--gold); }
+.checkout-step.done .step-num { background:#27ae60; }
+.step-label { font-size:0.8rem;font-weight:600;color:var(--obsidian); }
+.checkout-step-line { flex:1;max-width:80px;height:1px;background:var(--border);margin:0 var(--space-md); }
+</style>
+
+<%- include('../partials/footer') %>
+</body></html>

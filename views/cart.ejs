@@ -1,0 +1,301 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main>
+  <div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);">
+    <h1 style="font-family:var(--font-serif);font-size:clamp(2rem,4vw,3rem);font-weight:300;margin-bottom:var(--space-sm);">Your Cart</h1>
+
+    <% if (items && items.length) { %>
+    <!-- Free shipping progress -->
+    <% if (freeShippingRemaining > 0) { %>
+    <div style="background:var(--pearl);border:1px solid var(--border-gold);border-radius:var(--radius-md);padding:var(--space-md) var(--space-lg);margin-bottom:var(--space-xl);">
+      <p style="font-size:0.85rem;color:var(--ash);margin-bottom:0.5rem;">
+        Add <strong style="color:var(--gold)">R <%= freeShippingRemaining.toFixed(2) %></strong> more for free shipping
+      </p>
+      <div style="background:var(--border);height:4px;border-radius:2px;overflow:hidden;">
+        <div style="height:100%;background:var(--gold);border-radius:2px;width:<%= Math.min(100, (subtotal/freeShippingThreshold)*100).toFixed(0) %>%;transition:width 0.3s;"></div>
+      </div>
+    </div>
+    <% } else { %>
+    <div style="background:#e8f5e9;border:1px solid #c8e6c9;border-radius:var(--radius-md);padding:var(--space-md) var(--space-lg);margin-bottom:var(--space-xl);">
+      <p style="font-size:0.85rem;color:#2e7d32;font-weight:500;">✓ You qualify for free shipping!</p>
+    </div>
+    <% } %>
+
+    <div style="display:grid;grid-template-columns:1fr 340px;gap:var(--space-2xl);align-items:start;">
+      <!-- Cart items -->
+      <div id="cart-items-list">
+        <% items.forEach(item => { %>
+        <div class="cart-item" data-variant-id="<%= item.variant_id %>">
+          <div class="cart-item__image">
+            <% const img = item.primary_image || item.variant_image; %>
+            <% if (img) { %><img src="<%= img %>" alt="<%= item.product_name %>"><% } else { %><div style="background:var(--pearl);width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🏛</div><% } %>
+          </div>
+          <div class="cart-item__info">
+            <a href="/products/<%= item.product_slug %>" class="cart-item__name"><%= item.product_name %></a>
+            <% if (item.attributes && item.attributes.length) { %>
+            <p class="cart-item__variant">
+              <% item.attributes.filter(Boolean).forEach(a => { if (a && a.type) { %>
+              <%= a.type %>: <%= a.value %>&nbsp;
+              <% }}) %>
+            </p>
+            <% } %>
+            <p class="cart-item__sku"><%= item.sku || '' %></p>
+          </div>
+          <div class="cart-item__price">R <%= parseFloat(item.unit_price).toFixed(2) %></div>
+          <div class="cart-item__qty">
+            <div class="qty-control">
+              <button type="button" class="qty-btn" data-action="decrease" data-variant-id="<%= item.variant_id %>" aria-label="Decrease quantity">−</button>
+              <span class="qty-display" style="padding:0 var(--space-md);font-weight:600;"><%= item.quantity %></span>
+              <button type="button" class="qty-btn" data-action="increase" data-variant-id="<%= item.variant_id %>" aria-label="Increase quantity">+</button>
+            </div>
+          </div>
+          <div class="cart-item__total">R <%= (parseFloat(item.unit_price) * item.quantity).toFixed(2) %></div>
+          <button class="cart-item__remove" data-action="remove" data-variant-id="<%= item.variant_id %>" aria-label="Remove">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <% }) %>
+      </div>
+
+      <!-- Order summary -->
+      <div class="cart-summary">
+        <h2 style="font-family:var(--font-serif);font-size:1.4rem;font-weight:400;margin-bottom:var(--space-xl);padding-bottom:var(--space-md);border-bottom:1px solid var(--border);">Order Summary</h2>
+        <div class="cart-summary__row"><span>Subtotal</span><span id="summary-subtotal">R <%= subtotal.toFixed(2) %></span></div>
+        <div class="cart-summary__row"><span>Shipping</span><span id="summary-shipping"><%= shipping === 0 ? 'FREE' : 'R '+shipping.toFixed(2) %></span></div>
+        <div class="cart-summary__row cart-summary__row--total">
+          <span>Total</span>
+          <span id="summary-total">R <%= total.toFixed(2) %></span>
+        </div>
+        <% if (isAuthenticated) { %>
+        <a href="/checkout/address" class="btn btn-gold btn-full" style="margin-top:var(--space-xl);">Proceed to Checkout →</a>
+        <% } else { %>
+        <a href="/auth/login?returnTo=/checkout/address" class="btn btn-gold btn-full" style="margin-top:var(--space-xl);">Sign In to Checkout →</a>
+        <% } %>
+        <a href="/shop" class="btn btn-ghost btn-full" style="margin-top:var(--space-md);">Continue Shopping</a>
+        <div style="margin-top:var(--space-lg);text-align:center;font-size:0.75rem;color:var(--silver);">
+          🔒 Secure checkout via PayFast
+        </div>
+      </div>
+    </div>
+
+    <% } else { %>
+    <div class="empty-state" style="margin-top:var(--space-2xl);">
+      <div class="empty-state__icon">🛍</div>
+      <h2 class="empty-state__title">Your cart is empty</h2>
+      <p class="empty-state__text">Discover our curated collection of luxury pieces.</p>
+      <a href="/shop" class="btn btn-gold btn-lg">Explore the Collection</a>
+    </div>
+    <% } %>
+  </div>
+</main>
+
+<style>
+  .cart-item {
+    display: grid;
+    grid-template-columns: 80px 1fr 100px auto 100px 32px;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg) 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cart-item__image {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--pearl);
+  }
+
+  .cart-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-item__name {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--obsidian);
+    transition: color 0.15s;
+  }
+
+  .cart-item__name:hover {
+    color: var(--gold);
+  }
+
+  .cart-item__variant {
+    font-size: 0.75rem;
+    color: var(--silver);
+    margin-top: 0.25rem;
+  }
+
+  .cart-item__sku {
+    font-size: 0.7rem;
+    color: rgba(154, 154, 154, 0.7);
+    margin-top: 0.15rem;
+  }
+
+  .cart-item__price,
+  .cart-item__total {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .cart-item__remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--silver);
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: all 0.15s;
+  }
+
+  .cart-item__remove:hover {
+    color: #e74c3c;
+    background: rgba(231, 76, 60, 0.08);
+  }
+
+  .qty-control {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .qty-btn {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--obsidian);
+    transition: background 0.15s;
+  }
+
+  .qty-btn:hover {
+    background: var(--pearl);
+  }
+
+  .cart-summary {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-xl);
+    position: sticky;
+    top: 90px;
+  }
+
+  .cart-summary__row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+    font-size: 0.9rem;
+    color: var(--ash);
+  }
+
+  .cart-summary__row--total {
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border);
+    margin-top: var(--space-md);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--obsidian);
+  }
+
+  @media(max-width:768px) {
+    .cart-item {
+      grid-template-columns: 64px 1fr auto;
+      gap: var(--space-sm);
+    }
+
+    .cart-item__price {
+      display: none;
+    }
+  }
+</style>
+
+<%- include('partials/footer') %>
+<script>
+  // Event delegation — replaces all inline onclick handlers to satisfy CSP script-src-attr 'none'
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+    const variantId = btn.dataset.variantId;
+
+    if (action === 'increase' || action === 'decrease') {
+      const delta = action === 'increase' ? 1 : -1;
+      updateQty(variantId, delta, btn);
+    } else if (action === 'remove') {
+      removeItem(variantId, btn);
+    }
+  });
+
+  async function updateQty(variantId, delta, btn) {
+    const row = btn.closest('.cart-item');
+    const display = row.querySelector('.qty-display');
+    const current = parseInt(display.textContent, 10);
+    const newQty = Math.max(0, current + delta);
+    display.textContent = newQty;
+    try {
+      const res = await fetch('/cart/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          variantId,
+          quantity: newQty
+        }),
+      });
+      const data = await res.json();
+      if (newQty === 0) {
+        row.remove();
+      }
+      updateSummary(data);
+      const badge = document.getElementById('cart-count');
+      if (badge) badge.textContent = data.cartCount;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function removeItem(variantId, btn) {
+    const row = btn.closest('.cart-item');
+    row.style.opacity = '0.5';
+    try {
+      const res = await fetch('/cart/remove', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          variantId
+        }),
+      });
+      const data = await res.json();
+      row.remove();
+      const badge = document.getElementById('cart-count');
+      if (badge) badge.textContent = data.cartCount;
+    } catch (e) {
+      console.error(e);
+      row.style.opacity = '1';
+    }
+  }
+
+  function updateSummary(data) {
+    if (data.subtotal !== undefined) document.getElementById('summary-subtotal').textContent = 'R ' + parseFloat(data.subtotal).toFixed(2);
+    if (data.shipping !== undefined) document.getElementById('summary-shipping').textContent = data.shipping === 0 ? 'FREE' : 'R ' + parseFloat(data.shipping).toFixed(2);
+    if (data.total !== undefined) document.getElementById('summary-total').textContent = 'R ' + parseFloat(data.total).toFixed(2);
+  }
+</script>
+</body>
+
+</html>

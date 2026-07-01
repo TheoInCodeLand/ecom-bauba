@@ -1,0 +1,128 @@
+<%- include('./layout-start') %>
+
+<div class="admin-topbar">
+  <h1>Dashboard</h1>
+  <div style="font-size:0.8rem;color:var(--silver);"><%= new Date().toLocaleDateString('en-ZA',{weekday:'long',day:'2-digit',month:'long',year:'numeric'}) %></div>
+</div>
+
+<!-- KPI Stats -->
+<div class="admin-stat-grid">
+  <div class="admin-stat">
+    <div class="admin-stat__label">Today's Revenue</div>
+    <div class="admin-stat__value" style="font-size:1.6rem;"><%= stats && stats.today_revenue ? formatCurrency(stats.today_revenue) : 'R 0.00' %></div>
+    <div class="admin-stat__sub">Paid orders today</div>
+  </div>
+  <div class="admin-stat">
+    <div class="admin-stat__label">Total Orders</div>
+    <div class="admin-stat__value"><%= stats?.total_orders || 0 %></div>
+    <div class="admin-stat__sub"><%= stats?.pending_orders || 0 %> pending</div>
+  </div>
+  <div class="admin-stat">
+    <div class="admin-stat__label">Customers</div>
+    <div class="admin-stat__value"><%= userCount || 0 %></div>
+    <div class="admin-stat__sub">Registered accounts</div>
+  </div>
+  <div class="admin-stat">
+    <div class="admin-stat__label">Low Stock</div>
+    <div class="admin-stat__value" style="color:<%= lowStock && lowStock.length>0?'#e74c3c':'var(--obsidian)' %>"><%= lowStock ? lowStock.length : 0 %></div>
+    <div class="admin-stat__sub">Items need restocking</div>
+  </div>
+</div>
+
+<!-- Revenue Chart -->
+<% if (chartData) { %>
+<div class="admin-card" style="margin-bottom:1.5rem;">
+  <div class="admin-card-header"><h2>Revenue — Last 7 Days</h2></div>
+  <div class="admin-card-body">
+    <canvas id="revenue-chart" height="80"></canvas>
+  </div>
+</div>
+<% } %>
+
+<div style="display:grid;grid-template-columns:1fr 300px;gap:1.5rem;">
+  <!-- Recent Orders -->
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <h2>Recent Orders</h2>
+      <a href="/admin/orders" style="font-size:0.8rem;color:var(--gold);">View all →</a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Order</th><th>Customer</th><th>Status</th><th>Total</th></tr></thead>
+        <tbody>
+        <% if (recentOrders && recentOrders.length) { %>
+          <% recentOrders.slice(0,8).forEach(o => { %>
+          <tr onclick="window.location='/admin/orders/<%= o.id %>'" style="cursor:pointer;">
+            <td><strong>#<%= o.order_number %></strong><br><span style="font-size:0.75rem;color:var(--silver);"><%= new Date(o.created_at).toLocaleDateString('en-ZA') %></span></td>
+            <td style="font-size:0.85rem;"><%= o.first_name || 'Guest' %> <%= o.last_name || '' %><br><span style="font-size:0.75rem;color:var(--silver);"><%= o.user_email || '' %></span></td>
+            <td><span class="status-pill status-<%= o.status %>"><%= o.status.replace(/_/g,' ') %></span></td>
+            <td><strong><%= formatCurrency(o.total_amount) %></strong></td>
+          </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="4" style="text-align:center;color:var(--silver);padding:2rem;">No orders yet.</td></tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Low Stock -->
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <h2>Low Stock Alert</h2>
+      <a href="/admin/inventory" style="font-size:0.8rem;color:var(--gold);">Manage →</a>
+    </div>
+    <div class="admin-card-body" style="padding:0;">
+      <% if (lowStock && lowStock.length) { %>
+        <% lowStock.slice(0,8).forEach(item => { %>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1.25rem;border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-size:0.85rem;font-weight:600;color:var(--obsidian);"><%= item.product_name %></div>
+            <div style="font-size:0.72rem;color:var(--silver);"><%= item.sku || item.variant_name || 'Default' %></div>
+          </div>
+          <span style="background:<%= item.stock_quantity<=0?'#fce8e8':item.stock_quantity<=item.low_stock_threshold?'#fff7e6':'#e8f5e9' %>;color:<%= item.stock_quantity<=0?'#c0392b':item.stock_quantity<=item.low_stock_threshold?'#b7791f':'#2e7d32' %>;font-size:0.7rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:100px;"><%= item.stock_quantity %> left</span>
+        </div>
+        <% }) %>
+      <% } else { %>
+        <div style="text-align:center;padding:2rem;color:var(--silver);font-size:0.85rem;">✓ All items well-stocked</div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<% if (chartData) { %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script>
+const data = <%- chartData %>;
+const labels = data.map(d => new Date(d.day).toLocaleDateString('en-ZA',{day:'2-digit',month:'short'}));
+const revenues = data.map(d => parseFloat(d.revenue));
+new Chart(document.getElementById('revenue-chart'), {
+  type:'line',
+  data:{
+    labels,
+    datasets:[{
+      label:'Revenue (R)',
+      data:revenues,
+      borderColor:'#c9a96e',
+      backgroundColor:'rgba(201,169,110,0.08)',
+      borderWidth:2,
+      pointRadius:4,
+      pointBackgroundColor:'#c9a96e',
+      fill:true,
+      tension:0.4,
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{beginAtZero:true,ticks:{callback:v=>'R '+v.toLocaleString()}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+</script>
+<% } %>
+
+<%- include('./layout-end') %>

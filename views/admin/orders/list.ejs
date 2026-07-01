@@ -1,0 +1,51 @@
+<%- include('../layout-start') %>
+<div class="admin-topbar">
+  <h1>Orders</h1>
+</div>
+<div class="admin-card" style="margin-bottom:1.5rem;">
+  <div class="admin-card-body" style="padding:1rem 1.5rem;">
+    <form method="GET" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+      <input class="form-control" name="search" value="<%= search %>" placeholder="Order # or email…" style="max-width:260px;">
+      <select class="form-control" name="status" style="max-width:180px;" onchange="this.form.submit()">
+        <option value="">All Status</option>
+        <% ['pending','payment_pending','processing','ready_to_ship','shipped','delivered','cancelled','refunded'].forEach(s => { %>
+        <option value="<%= s %>" <%= status===s?'selected':'' %>><%= s.replace(/_/g,' ') %></option>
+        <% }) %>
+      </select>
+      <button type="submit" class="btn btn-outline btn-sm">Filter</button>
+      <% if (search || status) { %><a href="/admin/orders" class="btn btn-ghost btn-sm">Clear</a><% } %>
+    </form>
+  </div>
+</div>
+<div class="admin-card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Status</th><th>Payment</th><th>Total</th><th></th></tr></thead>
+      <tbody>
+      <% if (orders && orders.length) { %>
+        <% orders.forEach(o => { %>
+        <tr onclick="window.location='/admin/orders/<%= o.id %>'" style="cursor:pointer;">
+          <td><strong>#<%= o.order_number %></strong></td>
+          <td style="font-size:0.85rem;"><%= o.first_name || 'Guest' %> <%= o.last_name||'' %><br><span style="color:var(--silver);font-size:0.75rem;"><%= o.user_email||'' %></span></td>
+          <td style="font-size:0.8rem;color:var(--silver);white-space:nowrap;"><%= new Date(o.created_at).toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'}) %></td>
+          <td><span class="status-pill status-<%= o.status %>"><%= o.status.replace(/_/g,' ') %></span></td>
+          <td><span class="status-pill status-<%= o.payment_status %>"><%= o.payment_status %></span></td>
+          <td><strong><%= formatCurrency(o.total_amount) %></strong></td>
+          <td><a href="/admin/orders/<%= o.id %>" class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">View</a></td>
+        </tr>
+        <% }) %>
+      <% } else { %>
+        <tr><td colspan="7" style="text-align:center;padding:3rem;color:var(--silver);">No orders found.</td></tr>
+      <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% if (pagination && pagination.totalPages > 1) { %>
+<div class="pagination" style="margin-top:1.5rem;">
+  <% if (pagination.hasPrev) { %><a href="?page=<%= pagination.prevPage %>&status=<%= status %>&search=<%= search %>" class="page-btn">‹</a><% } %>
+  <% for(let i=1;i<=pagination.totalPages;i++){ %><a href="?page=<%= i %>&status=<%= status %>&search=<%= search %>" class="page-btn <%= pagination.page===i?'active':'' %>"><%= i %></a><% } %>
+  <% if (pagination.hasNext) { %><a href="?page=<%= pagination.nextPage %>&status=<%= status %>&search=<%= search %>" class="page-btn">›</a><% } %>
+</div>
+<% } %>
+<%- include('../layout-end') %>

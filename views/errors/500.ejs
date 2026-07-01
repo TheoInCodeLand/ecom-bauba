@@ -1,0 +1,22 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<main>
+<section style="min-height:75vh;display:flex;align-items:center;justify-content:center;padding:var(--space-3xl) var(--space-md);text-align:center;">
+  <div>
+    <div style="font-size:4rem;margin-bottom:var(--space-xl);">⚠</div>
+    <h1 style="font-family:var(--font-serif);font-size:2.2rem;font-weight:300;margin-bottom:var(--space-md);">Something went wrong</h1>
+    <p style="color:var(--silver);max-width:440px;margin:0 auto var(--space-2xl);line-height:1.8;">
+      We've encountered an unexpected error. Our team has been notified. Please try again in a moment.
+    </p>
+    <% if (process.env.NODE_ENV !== 'production' && message) { %>
+    <div style="background:var(--pearl);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-lg);margin-bottom:var(--space-2xl);text-align:left;max-width:600px;font-family:monospace;font-size:0.8rem;color:#c0392b;word-break:break-all;"><%= message %></div>
+    <% } %>
+    <div style="display:flex;gap:var(--space-md);justify-content:center;flex-wrap:wrap;">
+      <a href="/" class="btn btn-primary">Back to Home</a>
+      <button onclick="window.history.back()" class="btn btn-ghost">Go Back</button>
+    </div>
+  </div>
+</section>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

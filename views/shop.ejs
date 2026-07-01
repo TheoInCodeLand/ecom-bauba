@@ -1,0 +1,119 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main>
+<div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);">
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:var(--space-2xl);align-items:start;">
+
+    <!-- Sidebar Filters -->
+    <aside class="shop-sidebar">
+      <form method="GET" action="/shop" id="filter-form">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-lg);">
+          <h3 style="font-family:var(--font-serif);font-size:1.2rem;font-weight:400;">Filters</h3>
+          <a href="/shop" style="font-size:0.75rem;color:var(--silver);">Clear all</a>
+        </div>
+
+        <!-- Categories -->
+        <% if (categories && categories.length) { %>
+        <div class="filter-group">
+          <div class="filter-group__title">Category</div>
+          <% categories.forEach(cat => { %>
+          <label class="filter-option">
+            <input type="radio" name="category" value="<%= cat.slug %>"
+              <%= (filters.category === cat.slug || (typeof category !== 'undefined' && category && category.slug === cat.slug)) ? 'checked' : '' %>
+              onchange="this.form.submit()">
+            <span><%= cat.name %></span>
+          </label>
+          <% }) %>
+        </div>
+        <% } %>
+
+        <!-- Price Range -->
+        <div class="filter-group">
+          <div class="filter-group__title">Price Range</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-sm);">
+            <div>
+              <label class="form-label" style="font-size:0.65rem;">Min (R)</label>
+              <input class="form-control" type="number" name="minPrice" value="<%= filters.minPrice || '' %>" placeholder="0" style="padding:0.5rem;">
+            </div>
+            <div>
+              <label class="form-label" style="font-size:0.65rem;">Max (R)</label>
+              <input class="form-control" type="number" name="maxPrice" value="<%= filters.maxPrice || '' %>" placeholder="Any" style="padding:0.5rem;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Sort -->
+        <div class="filter-group">
+          <div class="filter-group__title">Sort By</div>
+          <select class="form-control" name="sort" onchange="this.form.submit()" style="padding:0.5rem;">
+            <option value="newest" <%= filters.sort==='newest'?'selected':'' %>>Newest First</option>
+            <option value="price_asc" <%= filters.sort==='price_asc'?'selected':'' %>>Price: Low to High</option>
+            <option value="price_desc" <%= filters.sort==='price_desc'?'selected':'' %>>Price: High to Low</option>
+            <option value="bestselling" <%= filters.sort==='bestselling'?'selected':'' %>>Bestselling</option>
+            <option value="rating" <%= filters.sort==='rating'?'selected':'' %>>Highest Rated</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" style="margin-top:var(--space-md);">Apply Filters</button>
+      </form>
+    </aside>
+
+    <!-- Products -->
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-xl);">
+        <div>
+          <h1 style="font-family:var(--font-serif);font-size:1.8rem;font-weight:300;margin-bottom:0.25rem;">
+            <%= category ? category.name : 'All Products' %>
+          </h1>
+          <p style="color:var(--silver);font-size:0.85rem;"><%= total %> item<%= total !== 1 ? 's' : '' %></p>
+        </div>
+      </div>
+
+      <% if (products && products.length) { %>
+      <div class="product-grid">
+        <% products.forEach(product => { %>
+          <%- include('partials/product-card', { product }) %>
+        <% }) %>
+      </div>
+
+      <!-- Pagination -->
+      <% if (pagination.totalPages > 1) { %>
+      <div class="pagination">
+        <% if (pagination.hasPrev) { %>
+          <a href="?page=<%= pagination.prevPage %>&sort=<%= filters.sort %><%= filters.category ? '&category='+filters.category : '' %>" class="page-btn">‹</a>
+        <% } %>
+        <% for (let i=1; i<=pagination.totalPages; i++) { %>
+          <a href="?page=<%= i %>&sort=<%= filters.sort %><%= filters.category ? '&category='+filters.category : '' %>"
+             class="page-btn <%= pagination.page === i ? 'active' : '' %>"><%= i %></a>
+        <% } %>
+        <% if (pagination.hasNext) { %>
+          <a href="?page=<%= pagination.nextPage %>&sort=<%= filters.sort %><%= filters.category ? '&category='+filters.category : '' %>" class="page-btn">›</a>
+        <% } %>
+      </div>
+      <% } %>
+
+      <% } else { %>
+      <div class="empty-state">
+        <div class="empty-state__icon">🔍</div>
+        <h2 class="empty-state__title">No products found</h2>
+        <p class="empty-state__text">Try adjusting your filters or browse all products.</p>
+        <a href="/shop" class="btn btn-outline">Browse All</a>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+</main>
+
+<style>
+.shop-sidebar { position:sticky;top:90px; }
+.filter-group { border-top:1px solid var(--border);padding:var(--space-lg) 0; }
+.filter-group__title { font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--ash);margin-bottom:var(--space-md); }
+.filter-option { display:flex;align-items:center;gap:0.5rem;padding:0.25rem 0;cursor:pointer;font-size:0.85rem;color:var(--ash); }
+.filter-option input[type="radio"] { accent-color:var(--gold); }
+@media(max-width:768px){ .shop-sidebar { display:none; } }
+</style>
+
+<%- include('partials/footer') %>
+</body></html>

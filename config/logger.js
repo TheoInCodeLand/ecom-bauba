@@ -1,0 +1,56 @@
+'use strict';
+const winston = require('winston');
+const path = require('path');
+const fs = require('fs');
+
+// Ensure logs directory exists
+const logDir = path.join(__dirname, '..', 'logs');
+if (!fs.existsSync(logDir)) {
+    fs.mkdirSync(logDir, { recursive: true });
+}
+
+const { combine, timestamp, printf, colorize, errors } = winston.format;
+
+const logFormat = printf(({ level, message, timestamp, stack, ...meta }) => {
+    let log = `${timestamp} [${level}]: ${stack || message}`;
+    if (Object.keys(meta).length) {
+        log += ` ${JSON.stringify(meta)}`;
+    }
+    return log;
+});
+
+const logger = winston.createLogger({
+    level: process.env.LOG_LEVEL || 'info',
+    format: combine(
+        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        errors({ stack: true }),
+        logFormat
+    ),
+    transports: [
+        new winston.transports.File({
+            filename: path.join(logDir, 'error.log'),
+            level: 'error',
+        }),
+        new winston.transports.File({
+            filename: path.join(logDir, 'combined.log'),
+        }),
+    ],
+});
+
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new winston.transports.Console({
+        format: combine(
+            colorize(),
+            timestamp({ format: 'HH:mm:ss' }),
+            errors({ stack: true }),
+            logFormat
+        ),
+    }));
+}
+
+// Morgan stream integration
+logger.stream = {
+    write: (message) => logger.http(message.trim()),
+};
+
+module.exports = logger;

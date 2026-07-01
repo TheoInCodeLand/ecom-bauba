@@ -1,0 +1,81 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+<main>
+<div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);">
+  <h1 style="font-family:var(--font-serif);font-size:clamp(2rem,4vw,3rem);font-weight:300;margin-bottom:var(--space-sm);">Wishlist</h1>
+  <p style="color:var(--silver);margin-bottom:var(--space-2xl);"><%= items ? items.length : 0 %> saved item<%= items && items.length !== 1 ? 's' : '' %></p>
+
+  <% if (items && items.length) { %>
+  <div class="product-grid">
+    <% items.forEach(item => { %>
+    <div class="product-card" style="position:relative;">
+      <!-- Remove from wishlist -->
+      <button class="wishlist-remove" data-product-id="<%= item.product_id %>" aria-label="Remove from wishlist"
+              onclick="removeFromWishlist(<%= item.product_id %>, this)">✕</button>
+
+      <a href="/products/<%= item.product_slug %>" class="product-card__image-wrap">
+        <% if (item.primary_image) { %>
+          <img src="<%= item.primary_image %>" alt="<%= item.product_name %>" class="product-card__image" loading="lazy">
+        <% } else { %>
+          <div class="product-card__placeholder">🏛</div>
+        <% } %>
+      </a>
+      <div class="product-card__info">
+        <% if (item.brand) { %><p class="product-card__brand"><%= item.brand %></p><% } %>
+        <h3 class="product-card__name"><a href="/products/<%= item.product_slug %>"><%= item.product_name %></a></h3>
+        <div class="product-card__price">
+          <span class="price-current">R <%= parseFloat(item.base_price).toFixed(2) %></span>
+        </div>
+        <form action="/cart/add" method="POST" class="product-card__atc">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <input type="hidden" name="variantId" value="<%= item.default_variant_id || '' %>">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" class="btn btn-outline btn-full btn-sm" style="margin-top:var(--space-md);">
+            Add to Cart
+          </button>
+        </form>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <div class="empty-state__icon">♡</div>
+    <h2 class="empty-state__title">Your wishlist is empty</h2>
+    <p class="empty-state__text">Save pieces you love and come back to them anytime.</p>
+    <a href="/shop" class="btn btn-gold btn-lg">Explore the Collection</a>
+  </div>
+  <% } %>
+</div>
+</main>
+
+<style>
+.wishlist-remove {
+  position:absolute; top:var(--space-sm); right:var(--space-sm); z-index:2;
+  width:28px; height:28px; border-radius:50%; border:1px solid var(--border);
+  background:var(--white); cursor:pointer; font-size:0.7rem; color:var(--silver);
+  display:flex; align-items:center; justify-content:center; transition:all 0.15s;
+}
+.wishlist-remove:hover { background:#fce8e8; color:#c0392b; border-color:#f5a5a5; }
+</style>
+
+<%- include('partials/footer') %>
+<script>
+async function removeFromWishlist(productId, btn) {
+  const card = btn.closest('.product-card');
+  card.style.opacity = '0.4';
+  try {
+    await fetch('/wishlist/toggle', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ productId }),
+    });
+    card.remove();
+    const count = document.querySelectorAll('.product-card').length;
+    document.querySelector('p[style*="margin-bottom"]').textContent = `${count} saved item${count!==1?'s':''}`;
+    if (count === 0) location.reload();
+  } catch(e) { card.style.opacity = '1'; }
+}
+</script>
+</body></html>

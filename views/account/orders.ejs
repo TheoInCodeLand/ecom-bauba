@@ -1,0 +1,53 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+<main>
+<div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);">
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:var(--space-2xl);">
+    <%- include('./sidebar') %>
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-2xl);">
+        <h1 style="font-family:var(--font-serif);font-size:2rem;font-weight:300;">My Orders</h1>
+      </div>
+      <% if (orders && orders.length) { %>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Order #</th><th>Date</th><th>Items</th><th>Status</th><th>Total</th><th></th></tr></thead>
+            <tbody>
+            <% orders.forEach(o => { %>
+            <tr>
+              <td><strong>#<%= o.order_number %></strong></td>
+              <td style="color:var(--silver);font-size:0.85rem;"><%= new Date(o.created_at).toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'}) %></td>
+              <td style="font-size:0.85rem;"><%= o.item_count || '—' %></td>
+              <td><span class="status-pill status-<%= o.status %>"><%= o.status.replace(/_/g,' ') %></span></td>
+              <td><strong><%= formatCurrency(o.total_amount) %></strong></td>
+              <td><a href="/orders/<%= o.uuid %>" class="btn btn-ghost btn-sm">View</a></td>
+            </tr>
+            <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Pagination -->
+      <% if (pagination && pagination.totalPages > 1) { %>
+      <div class="pagination">
+        <% if (pagination.hasPrev) { %><a href="?page=<%= pagination.prevPage %>" class="page-btn">‹</a><% } %>
+        <% for(let i=1;i<=pagination.totalPages;i++){ %><a href="?page=<%= i %>" class="page-btn <%= pagination.page===i?'active':'' %>"><%= i %></a><% } %>
+        <% if (pagination.hasNext) { %><a href="?page=<%= pagination.nextPage %>" class="page-btn">›</a><% } %>
+      </div>
+      <% } %>
+      <% } else { %>
+      <div class="empty-state">
+        <div class="empty-state__icon">📦</div>
+        <h2 class="empty-state__title">No orders yet</h2>
+        <p class="empty-state__text">Start shopping to see your orders here.</p>
+        <a href="/shop" class="btn btn-gold btn-lg">Explore the Collection</a>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

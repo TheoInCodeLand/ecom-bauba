@@ -1,0 +1,19 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<main>
+<section style="min-height:75vh;display:flex;align-items:center;justify-content:center;padding:var(--space-3xl) var(--space-md);text-align:center;">
+  <div>
+    <div style="font-family:var(--font-serif);font-size:8rem;font-weight:300;color:var(--pearl);line-height:1;margin-bottom:var(--space-lg);">404</div>
+    <h1 style="font-family:var(--font-serif);font-size:2rem;font-weight:300;margin-bottom:var(--space-md);">Page Not Found</h1>
+    <p style="color:var(--silver);max-width:400px;margin:0 auto var(--space-2xl);line-height:1.8;">
+      <%= message || 'The page you\'re looking for has moved or no longer exists.' %>
+    </p>
+    <div style="display:flex;gap:var(--space-md);justify-content:center;flex-wrap:wrap;">
+      <a href="/" class="btn btn-primary">Back to Home</a>
+      <a href="/shop" class="btn btn-ghost">Browse Collection</a>
+    </div>
+  </div>
+</section>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

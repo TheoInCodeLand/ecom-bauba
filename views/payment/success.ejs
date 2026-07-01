@@ -1,0 +1,33 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<main>
+<div class="container" style="padding:var(--space-3xl) var(--space-lg);text-align:center;max-width:640px;">
+  <div style="font-size:4rem;margin-bottom:var(--space-xl);">✓</div>
+  <h1 style="font-family:var(--font-serif);font-size:2.5rem;font-weight:300;color:var(--obsidian);margin-bottom:var(--space-md);">Payment Successful</h1>
+  <p style="color:var(--silver);font-size:1.05rem;margin-bottom:var(--space-2xl);line-height:1.8;">
+    Thank you for your order. We've sent a confirmation to your email and your order is now being prepared.
+  </p>
+  <% if (order) { %>
+  <div style="background:var(--pearl);border-radius:var(--radius-md);padding:var(--space-xl);margin-bottom:var(--space-2xl);text-align:left;">
+    <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);margin-bottom:0.5rem;">
+      <span style="color:var(--silver);font-size:0.85rem;">Order Number</span>
+      <strong>#<%= order.order_number %></strong>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);margin-bottom:0.5rem;">
+      <span style="color:var(--silver);font-size:0.85rem;">Status</span>
+      <span class="status-pill status-processing">Processing</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:0.5rem 0;">
+      <span style="color:var(--silver);font-size:0.85rem;">Total</span>
+      <strong style="color:var(--gold);">R <%= parseFloat(order.total_amount).toFixed(2) %></strong>
+    </div>
+  </div>
+  <a href="/orders/<%= order.uuid %>" class="btn btn-primary">View Order Details</a>
+  <% } else { %>
+  <a href="/orders" class="btn btn-primary">View My Orders</a>
+  <% } %>
+  <a href="/shop" class="btn btn-ghost" style="margin-left:var(--space-md);">Continue Shopping</a>
+</div>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

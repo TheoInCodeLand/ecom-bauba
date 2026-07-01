@@ -1,0 +1,367 @@
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+<%- include('partials/flash') %>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO SECTION
+═════════════════════════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero__overlay"></div>
+  <div class="hero__content fade-in">
+    <p class="hero__eyebrow letter-wide">New Season Collection</p>
+    <h1 class="hero__title">Curated Luxury.<br><em>Delivered.</em></h1>
+    <p class="hero__subtitle">Discover authentic luxury fashion — bags, clothing, shoes and jewellery — curated for the discerning collector.</p>
+    <div class="hero__actions">
+      <a href="/shop" class="btn btn-gold btn-lg">Explore the Collection</a>
+      <a href="/shop?sort=newest" class="btn btn-outline-gold btn-lg">New Arrivals</a>
+    </div>
+  </div>
+  <div class="hero__scroll-cue">
+    <span class="letter-wide">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<style>
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 40%, #2a1f10 100%);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url('/css/hero-pattern.svg') center/cover no-repeat;
+  opacity: 0.04;
+}
+.hero__overlay {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(201,169,110,0.08) 0%, transparent 70%);
+}
+.hero__content {
+  position: relative;
+  max-width: 680px;
+  padding: 0 var(--space-3xl);
+  color: var(--white);
+}
+.hero__eyebrow {
+  color: var(--gold);
+  margin-bottom: var(--space-lg);
+  opacity: 0.9;
+}
+.hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: var(--space-xl);
+}
+.hero__title em { font-style: italic; color: var(--gold-light); }
+.hero__subtitle {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.65);
+  max-width: 520px;
+  margin-bottom: var(--space-2xl);
+  line-height: 1.8;
+  font-weight: 300;
+}
+.hero__actions { display: flex; gap: var(--space-md); flex-wrap: wrap; }
+.hero__scroll-cue {
+  position: absolute;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  color: rgba(255,255,255,0.4);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+}
+.scroll-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, rgba(201,169,110,0.6), transparent);
+  animation: scrollDrop 2s ease-in-out infinite;
+}
+@keyframes scrollDrop { 0%,100%{transform:scaleY(0);transform-origin:top;} 50%{transform:scaleY(1);transform-origin:top;} }
+
+/* Decorative floating orbs */
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  right: -100px; top: 50%;
+  transform: translateY(-50%);
+  background: radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+@media(max-width:768px){
+  .hero__content{padding:0 var(--space-xl);}
+  .hero__title{font-size:2.8rem;}
+}
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CATEGORIES STRIP
+═════════════════════════════════════════════════════════════ -->
+<% if (categories && categories.length) { %>
+<section class="section-sm" style="background:var(--pearl);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--space-md);">
+      <% categories.slice(0,6).forEach(cat => { %>
+      <a href="/category/<%= cat.slug %>" class="category-chip">
+        <% if (cat.image_url) { %>
+        <div class="category-chip__image">
+          <img src="<%= cat.image_url %>" alt="<%= cat.name %>" loading="lazy">
+        </div>
+        <% } else { %>
+        <div class="category-chip__placeholder"></div>
+        <% } %>
+        <span class="category-chip__name"><%= cat.name %></span>
+        <% if (cat.product_count) { %>
+        <span class="category-chip__count"><%= cat.product_count %> items</span>
+        <% } %>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<style>
+.category-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-lg) var(--space-md);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-base) var(--ease);
+  cursor: pointer;
+  gap: var(--space-sm);
+}
+.category-chip:hover { border-color: var(--gold); box-shadow: var(--shadow-gold); transform: translateY(-2px); }
+.category-chip__image { width:72px;height:72px;border-radius:50%;overflow:hidden;border:2px solid var(--border-gold); }
+.category-chip__image img { width:100%;height:100%;object-fit:cover; }
+.category-chip__placeholder { width:72px;height:72px;border-radius:50%;background:var(--pearl);border:2px solid var(--border-gold); }
+.category-chip__name { font-family:var(--font-serif);font-size:1rem;color:var(--obsidian);font-weight:400; }
+.category-chip__count { font-size:0.7rem;color:var(--silver);letter-spacing:0.08em; }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NEW ARRIVALS
+═════════════════════════════════════════════════════════════ -->
+<% if (newArrivals && newArrivals.length) { %>
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-subtitle">Just Arrived</p>
+      <h2 class="section-title">New Arrivals</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="product-grid">
+      <% newArrivals.forEach(product => { %>
+        <%- include('partials/product-card', { product }) %>
+      <% }) %>
+    </div>
+    <div style="text-align:center;margin-top:var(--space-2xl);">
+      <a href="/shop?sort=newest" class="btn btn-outline">View All New Arrivals</a>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- ═══════════════════════════════════════════════════════════
+     EDITORIAL BANNER
+═════════════════════════════════════════════════════════════ -->
+<section class="editorial-banner">
+  <div class="editorial-banner__bg"></div>
+  <div class="editorial-banner__content container">
+    <div>
+      <p class="letter-wide" style="color:var(--gold);margin-bottom:var(--space-md)">The Maison Luxe Promise</p>
+      <h2 style="font-family:var(--font-serif);color:white;font-size:clamp(2rem,4vw,3rem);font-weight:300;max-width:560px;line-height:1.2;">
+        Every piece, every stitch — authenticity guaranteed.
+      </h2>
+      <p style="color:rgba(255,255,255,0.55);margin-top:var(--space-lg);max-width:480px;font-weight:300;line-height:1.8;">
+        We source directly from verified luxury boutiques and authorised retailers. Each item undergoes a rigorous authenticity review before it reaches you.
+      </p>
+      <a href="/about" class="btn btn-outline-gold btn-lg" style="margin-top:var(--space-xl);">Our Story</a>
+    </div>
+  </div>
+  <div class="editorial-banner__features">
+    <% [
+      { icon:'🛡', title:'Authenticated', desc:'Every item verified' },
+      { icon:'🚀', title:'Fast Delivery', desc:'2-5 business days' },
+      { icon:'↩', title:'Easy Returns', desc:'30-day free returns' },
+      { icon:'🔒', title:'Secure Payment', desc:'PayFast protected' },
+    ].forEach(f => { %>
+    <div class="editorial-feature">
+      <span class="editorial-feature__icon"><%= f.icon %></span>
+      <div>
+        <div style="color:var(--white);font-weight:600;font-size:0.9rem"><%= f.title %></div>
+        <div style="color:rgba(255,255,255,0.45);font-size:0.75rem"><%= f.desc %></div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</section>
+
+<style>
+.editorial-banner {
+  position: relative;
+  background: linear-gradient(125deg, #0a0a0a 0%, #1a1207 60%, #1a0a0a 100%);
+  padding: var(--space-3xl) 0;
+  overflow: hidden;
+}
+.editorial-banner__bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(201,169,110,0.07) 0%, transparent 60%);
+}
+.editorial-banner__content { position: relative; z-index: 1; }
+.editorial-banner__features {
+  position: relative; z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2xl);
+  flex-wrap: wrap;
+  margin-top: var(--space-2xl);
+  padding: var(--space-xl) var(--space-lg);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.editorial-feature { display: flex; align-items: center; gap: var(--space-md); }
+.editorial-feature__icon { font-size: 1.5rem; }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════
+     BESTSELLERS
+═════════════════════════════════════════════════════════════ -->
+<% if (bestsellers && bestsellers.length) { %>
+<section class="section" style="background:var(--pearl);">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-subtitle">Most Loved</p>
+      <h2 class="section-title">Bestsellers</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="product-grid-4" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--space-lg);">
+      <% bestsellers.forEach(product => { %>
+        <%- include('partials/product-card', { product }) %>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- ═══════════════════════════════════════════════════════════
+     REVIEWS / SOCIAL PROOF
+═════════════════════════════════════════════════════════════ -->
+<% if (reviews && reviews.length) { %>
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-subtitle">Client Stories</p>
+      <h2 class="section-title">What Our Clients Say</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="reviews-grid">
+      <% reviews.forEach(r => { %>
+      <div class="review-card slide-up">
+        <div class="stars" style="font-size:0.9rem;color:var(--gold);margin-bottom:var(--space-md);">★★★★★</div>
+        <% if (r.title) { %><h4 style="font-family:var(--font-serif);font-size:1rem;margin-bottom:var(--space-sm)"><%= r.title %></h4><% } %>
+        <p style="font-size:0.9rem;line-height:1.8;color:var(--ash);margin-bottom:var(--space-lg);">"<%= r.body %>"</p>
+        <div style="display:flex;align-items:center;gap:var(--space-sm);">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--pearl);display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:1rem;color:var(--gold)">
+            <%= r.first_name.charAt(0) %>
+          </div>
+          <div>
+            <div style="font-size:0.8rem;font-weight:600;color:var(--obsidian)"><%= r.first_name %></div>
+            <div style="font-size:0.7rem;color:var(--silver)"><%= r.product_name %></div>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<style>
+.reviews-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: var(--space-lg); }
+.review-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:var(--space-xl); position:relative; }
+.review-card::before { content:'"'; font-family:var(--font-serif); font-size:5rem; color:var(--gold-light); opacity:0.3; position:absolute; top:0.5rem; left:1rem; line-height:1; }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NEWSLETTER CTA
+═════════════════════════════════════════════════════════════ -->
+<section class="section" style="background:var(--obsidian);text-align:center;">
+  <div class="container-narrow">
+    <p class="section-subtitle" style="color:var(--gold);">Exclusive Access</p>
+    <h2 style="font-family:var(--font-serif);color:var(--white);font-size:2.5rem;font-weight:300;margin-bottom:var(--space-md)">
+      Be First to Know
+    </h2>
+    <p style="color:rgba(255,255,255,0.5);margin-bottom:var(--space-2xl);">
+      Join our community of luxury enthusiasts. Get early access to new arrivals, exclusive offers and invitations to private events.
+    </p>
+    <form class="newsletter-hero-form" style="display:flex;max-width:480px;margin:0 auto;" action="/newsletter" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="email" name="email" placeholder="Enter your email" required
+             style="flex:1;padding:1rem 1.25rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-right:none;color:white;font-size:0.9rem;outline:none;border-radius:var(--radius-sm) 0 0 var(--radius-sm);">
+      <button type="submit" class="btn btn-gold" style="border-radius:0 var(--radius-sm) var(--radius-sm) 0;white-space:nowrap;">
+        Subscribe
+      </button>
+    </form>
+    <p style="color:rgba(255,255,255,0.25);font-size:0.75rem;margin-top:var(--space-md);">No spam. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+</main>
+
+<%- include('partials/footer') %>
+
+<script>
+// Wishlist buttons
+document.querySelectorAll('.wishlist-btn').forEach(btn => {
+  btn.addEventListener('click', async e => {
+    e.preventDefault();
+    if (btn.dataset.authRequired) {
+      window.location.href = '/auth/login';
+      return;
+    }
+    const productId = btn.dataset.productId;
+    try {
+      const res = await fetch('/wishlist/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify({ productId }),
+      });
+      const data = await res.json();
+      if (data.added) btn.classList.add('wishlisted');
+      else btn.classList.remove('wishlisted');
+    } catch(err) { console.error(err); }
+  });
+});
+
+// Animate on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.animationPlayState = 'running'; } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.slide-up').forEach(el => {
+  el.style.animationPlayState = 'paused';
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>

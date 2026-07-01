@@ -1,0 +1,106 @@
+<%- include('./layout-start') %>
+<div class="admin-topbar"><h1>Store Settings</h1></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+  <!-- General Settings -->
+  <div class="admin-card">
+    <div class="admin-card-header"><h2>General</h2></div>
+    <div class="admin-card-body">
+      <form method="POST" action="/admin/settings">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="group" value="general">
+        <% const generalKeys = [
+          { key:'store_name',           label:'Store Name',         type:'text' },
+          { key:'store_tagline',        label:'Tagline',            type:'text' },
+          { key:'store_email',          label:'Store Email',        type:'email' },
+          { key:'store_phone',          label:'Store Phone',        type:'tel' },
+          { key:'store_currency',       label:'Currency Code',      type:'text' },
+        ]; %>
+        <% generalKeys.forEach(f => { %>
+        <div class="form-group">
+          <label class="form-label"><%= f.label %></label>
+          <input class="form-control" type="<%= f.type %>" name="<%= f.key %>"
+                 value="<%= settings && settings[f.key] ? settings[f.key] : '' %>"
+                 placeholder="<%= f.label %>">
+        </div>
+        <% }) %>
+        <button type="submit" class="btn btn-primary">Save General Settings</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Shipping & Commerce -->
+  <div class="admin-card">
+    <div class="admin-card-header"><h2>Shipping & Commerce</h2></div>
+    <div class="admin-card-body">
+      <form method="POST" action="/admin/settings">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="group" value="shipping">
+        <div class="form-group">
+          <label class="form-label">Free Shipping Threshold (R)</label>
+          <input class="form-control" type="number" name="free_shipping_threshold" step="0.01"
+                 value="<%= settings && settings.free_shipping_threshold ? settings.free_shipping_threshold : '2500' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Standard Shipping Cost (R)</label>
+          <input class="form-control" type="number" name="shipping_cost" step="0.01"
+                 value="<%= settings && settings.shipping_cost ? settings.shipping_cost : '120' %>">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max Items Per Cart</label>
+          <input class="form-control" type="number" name="max_cart_items" min="1"
+                 value="<%= settings && settings.max_cart_items ? settings.max_cart_items : '50' %>">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Shipping Settings</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Announcement Banner -->
+  <div class="admin-card">
+    <div class="admin-card-header"><h2>Announcement Banner</h2></div>
+    <div class="admin-card-body">
+      <form method="POST" action="/admin/settings">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="group" value="banner">
+        <div class="form-group">
+          <label class="form-label">Banner Text</label>
+          <input class="form-control" name="announcement_banner_text"
+                 value="<%= settings && settings.announcement_banner_text ? settings.announcement_banner_text : '' %>"
+                 placeholder="e.g. Free shipping on orders over R2,500">
+        </div>
+        <label style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;cursor:pointer;font-size:0.85rem;color:var(--ash);">
+          <input type="checkbox" name="announcement_banner_active" value="true"
+                 <%= settings && settings.announcement_banner_active === 'true' ? 'checked' : '' %>
+                 style="accent-color:var(--gold);width:16px;height:16px;">
+          Enable announcement banner
+        </label>
+        <button type="submit" class="btn btn-primary">Save Banner Settings</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SEO & Meta -->
+  <div class="admin-card">
+    <div class="admin-card-header"><h2>SEO & Meta</h2></div>
+    <div class="admin-card-body">
+      <form method="POST" action="/admin/settings">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="group" value="seo">
+        <div class="form-group">
+          <label class="form-label">Meta Title</label>
+          <input class="form-control" name="meta_title"
+                 value="<%= settings && settings.meta_title ? settings.meta_title : '' %>"
+                 maxlength="60" placeholder="60 chars max">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Meta Description</label>
+          <textarea class="form-control" name="meta_description" rows="3" maxlength="160"
+                    placeholder="160 chars max" style="min-height:80px;"><%= settings && settings.meta_description ? settings.meta_description : '' %></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save SEO Settings</button>
+      </form>
+    </div>
+  </div>
+</div>
+<%- include('./layout-end') %>

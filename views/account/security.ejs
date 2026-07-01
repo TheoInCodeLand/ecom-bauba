@@ -1,0 +1,36 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+<main>
+<div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);">
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:var(--space-2xl);">
+    <%- include('./sidebar') %>
+    <div>
+      <h1 style="font-family:var(--font-serif);font-size:2rem;font-weight:300;margin-bottom:var(--space-2xl);">Security Settings</h1>
+      <div class="card">
+        <div class="card-body">
+          <h2 style="font-family:var(--font-serif);font-size:1.3rem;font-weight:400;margin-bottom:var(--space-xl);">Change Password</h2>
+          <form method="POST" action="/account/security/change-password" style="max-width:480px;">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group">
+              <label class="form-label" for="currentPassword">Current Password</label>
+              <input class="form-control" type="password" name="currentPassword" id="currentPassword" required autocomplete="current-password">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newPassword">New Password</label>
+              <input class="form-control" type="password" name="newPassword" id="newPassword" required minlength="8" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="confirmPassword">Confirm New Password</label>
+              <input class="form-control" type="password" name="confirmPassword" id="confirmPassword" required autocomplete="new-password">
+            </div>
+            <button type="submit" class="btn btn-primary">Update Password</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

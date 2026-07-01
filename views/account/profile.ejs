@@ -1,0 +1,80 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+<main>
+<div class="container" style="padding:var(--space-2xl) var(--space-lg) var(--space-3xl);">
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:var(--space-2xl);">
+    <%- include('./sidebar') %>
+    <div>
+      <h1 style="font-family:var(--font-serif);font-size:2rem;font-weight:300;margin-bottom:var(--space-2xl);">My Profile</h1>
+      <div class="card">
+        <div class="card-body">
+          <form method="POST" action="/account/profile" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <!-- Avatar -->
+            <div style="display:flex;align-items:center;gap:var(--space-xl);margin-bottom:var(--space-2xl);padding-bottom:var(--space-2xl);border-bottom:1px solid var(--border);">
+              <div style="position:relative;">
+                <% if (user.avatar_url) { %>
+                  <img src="<%= user.avatar_url %>" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);">
+                <% } else { %>
+                  <div style="width:90px;height:90px;border-radius:50%;background:var(--pearl);display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:2rem;color:var(--gold);border:3px solid var(--border-gold);">
+                    <%= user.first_name.charAt(0) %>
+                  </div>
+                <% } %>
+              </div>
+              <div>
+                <h3 style="font-family:var(--font-serif);font-weight:400;"><%= user.first_name %> <%= user.last_name %></h3>
+                <p style="color:var(--silver);font-size:0.85rem;margin-top:0.25rem;"><%= user.email %></p>
+                <% if (!user.email_verified) { %><span style="font-size:0.72rem;color:#f39c12;background:#fff7e6;padding:0.2rem 0.5rem;border-radius:100px;font-weight:600;">Email not verified</span><% } %>
+                <a href="/account/avatar" style="display:block;margin-top:0.75rem;font-size:0.75rem;color:var(--gold);">Change photo →</a>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-lg);">
+              <div class="form-group">
+                <label class="form-label" for="firstName">First Name</label>
+                <input class="form-control" type="text" name="firstName" id="firstName" value="<%= user.first_name %>" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="lastName">Last Name</label>
+                <input class="form-control" type="text" name="lastName" id="lastName" value="<%= user.last_name %>" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input class="form-control" type="email" value="<%= user.email %>" disabled style="opacity:0.6;cursor:not-allowed;">
+              <p style="font-size:0.75rem;color:var(--silver);margin-top:0.25rem;">Email cannot be changed for security reasons.</p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-lg);">
+              <div class="form-group">
+                <label class="form-label" for="phone">Phone Number</label>
+                <input class="form-control" type="tel" name="phone" id="phone" value="<%= user.phone || '' %>" placeholder="+27 ...">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="dateOfBirth">Date of Birth</label>
+                <input class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" value="<%= user.date_of_birth ? user.date_of_birth.toString().slice(0,10) : '' %>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="gender">Gender</label>
+              <select class="form-control" name="gender" id="gender">
+                <option value="">Prefer not to say</option>
+                <option value="female"   <%= user.gender==='female'?'selected':'' %>>Female</option>
+                <option value="male"     <%= user.gender==='male'?'selected':'' %>>Male</option>
+                <option value="non_binary" <%= user.gender==='non_binary'?'selected':'' %>>Non-binary</option>
+              </select>
+            </div>
+            <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;margin-bottom:var(--space-xl);">
+              <input type="checkbox" name="newsletterOptIn" <%= user.newsletter_opt_in ? 'checked' : '' %> style="accent-color:var(--gold);">
+              <span style="font-size:0.85rem;color:var(--ash);">Receive exclusive offers and new arrival alerts</span>
+            </label>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<%- include('../partials/footer') %>
+</body></html>

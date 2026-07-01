@@ -1,0 +1,156 @@
+<%- include('./layout-start') %>
+<div class="admin-topbar"><h1>Categories</h1></div>
+
+<div style="display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start;">
+
+  <!-- Category List -->
+  <div class="admin-card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Tier</th><th>Status</th><th>Position</th><th>Actions</th></tr></thead>
+        <tbody>
+        <% (categories||[]).forEach(cat => { %>
+        <% const tier = cat.depth === 0 ? 'Department' : cat.depth === 1 ? 'Category' : 'Subcategory'; %>
+        <tr>
+          <td style="padding-left:<%= cat.depth * 1.5 + 1 %>rem; position:relative;">
+            <% if (cat.depth > 0) { %>
+              <div style="position:absolute; left:<%= (cat.depth-1) * 1.5 + 1.5 %>rem; top:50%; width:0.5rem; height:1px; background:var(--silver);"></div>
+              <div style="position:absolute; left:<%= (cat.depth-1) * 1.5 + 1.5 %>rem; top:0; bottom:50%; width:1px; background:var(--silver);"></div>
+            <% } %>
+            <strong><%= cat.name %></strong>
+            <br><span style="font-size:0.72rem;color:var(--silver)">/<%= cat.slug %></span>
+          </td>
+          <td style="font-size:0.85rem;color:var(--ash);"><%= tier %></td>
+          <td><span class="status-pill <%= cat.is_active?'status-processing':'status-cancelled' %>"><%= cat.is_active?'Active':'Inactive' %></span></td>
+          <td style="font-size:0.85rem;"><%= cat.position %></td>
+          <td>
+            <div style="display:flex;gap:0.5rem;">
+              <button type="button" onclick="openEdit(<%= JSON.stringify(cat) %>)" class="btn btn-outline btn-sm">Edit</button>
+              <form method="POST" action="/admin/categories/<%= cat.id %>/delete" style="display:inline;" onsubmit="return confirm('Delete this category?')">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit" class="btn btn-ghost btn-sm" style="color:#c0392b;">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
+        <% if (!categories || !categories.length) { %>
+        <tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--silver);">No categories yet.</td></tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Right panel: Add + Edit -->
+  <div>
+
+    <!-- Add Category -->
+    <div class="admin-card" style="margin-bottom:1.5rem;" id="add-panel">
+      <div class="admin-card-header"><h2>Add Category</h2></div>
+      <div class="admin-card-body">
+        <form method="POST" action="/admin/categories/new">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="form-group">
+            <label class="form-label">Name *</label>
+            <input class="form-control" name="name" required placeholder="e.g. Handbags">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Parent Category</label>
+            <select class="form-control" name="parentId">
+              <option value="">Top-level (Department)</option>
+              <% (categories||[]).filter(c => c.depth < 2).forEach(cat => { %>
+              <option value="<%= cat.id %>"><%- '- '.repeat(cat.depth) %><%= cat.name %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="2" style="min-height:60px;"></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label class="form-label">Position</label>
+              <input class="form-control" type="number" name="position" value="0" min="0">
+            </div>
+            <div class="form-group" style="padding-top:1.8rem;">
+              <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.85rem;">
+                <input type="checkbox" name="isActive" value="on" checked style="accent-color:var(--gold);">
+                Active
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Create Category</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Edit Category (shown on demand) -->
+    <div class="admin-card" id="edit-panel" style="display:none;">
+      <div class="admin-card-header">
+        <h2>Edit Category</h2>
+        <button type="button" onclick="closeEdit()" style="background:none;border:none;cursor:pointer;color:var(--silver);font-size:1.2rem;">✕</button>
+      </div>
+      <div class="admin-card-body">
+        <form method="POST" id="edit-form" action="">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <div class="form-group">
+            <label class="form-label">Name *</label>
+            <input class="form-control" name="name" id="edit-name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Parent Category</label>
+            <select class="form-control" name="parentId" id="edit-parentId">
+              <option value="">Top-level (Department)</option>
+              <% (categories||[]).filter(c => c.depth < 2).forEach(cat => { %>
+              <option value="<%= cat.id %>"><%- '- '.repeat(cat.depth) %><%= cat.name %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" id="edit-description" rows="2" style="min-height:60px;"></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group">
+              <label class="form-label">Position</label>
+              <input class="form-control" type="number" name="position" id="edit-position" min="0">
+            </div>
+            <div class="form-group" style="padding-top:1.8rem;">
+              <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.85rem;">
+                <input type="checkbox" name="isActive" value="on" id="edit-isActive" style="accent-color:var(--gold);">
+                Active
+              </label>
+            </div>
+          </div>
+          <div style="display:flex;gap:0.75rem;">
+            <button type="submit" class="btn btn-primary" style="flex:1;">Save Changes</button>
+            <button type="button" onclick="closeEdit()" class="btn btn-ghost">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function openEdit(cat) {
+  document.getElementById('add-panel').style.display = 'none';
+  document.getElementById('edit-panel').style.display = 'block';
+  document.getElementById('edit-form').action = '/admin/categories/' + cat.id + '/update';
+  document.getElementById('edit-name').value = cat.name || '';
+  document.getElementById('edit-description').value = cat.description || '';
+  document.getElementById('edit-position').value = cat.position || 0;
+  document.getElementById('edit-isActive').checked = !!cat.is_active;
+  const sel = document.getElementById('edit-parentId');
+  sel.value = cat.parent_id || '';
+  document.getElementById('edit-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function closeEdit() {
+  document.getElementById('edit-panel').style.display = 'none';
+  document.getElementById('add-panel').style.display = 'block';
+}
+</script>
+
+<%- include('./layout-end') %>

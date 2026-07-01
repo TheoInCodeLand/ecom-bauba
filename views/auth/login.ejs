@@ -1,0 +1,58 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+<%- include('../partials/flash') %>
+
+<main>
+<section style="min-height:80vh;display:flex;align-items:center;justify-content:center;padding:var(--space-2xl) var(--space-md);">
+  <div style="width:100%;max-width:440px;">
+    <div style="text-align:center;margin-bottom:var(--space-2xl);">
+      <a href="/" class="nav-logo" style="display:inline-block;margin-bottom:var(--space-lg);">Maison<span style="color:var(--gold)">.</span>Luxe</a>
+      <h1 style="font-family:var(--font-serif);font-size:2rem;font-weight:300;margin-bottom:var(--space-sm);">Welcome back</h1>
+      <p style="color:var(--silver);font-size:0.9rem;">Sign in to your account</p>
+    </div>
+
+    <div class="card">
+      <div class="card-body" style="padding:var(--space-2xl);">
+        <form method="POST" action="/auth/login" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <% if (returnTo) { %><input type="hidden" name="returnTo" value="<%= returnTo %>"><% } %>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input class="form-control" type="email" name="email" id="email" required autocomplete="email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="password">
+              Password
+              <a href="/auth/forgot-password" style="float:right;color:var(--gold);font-size:0.75rem;font-weight:400;letter-spacing:0;text-transform:none;">Forgot?</a>
+            </label>
+            <div style="position:relative;">
+              <input class="form-control" type="password" name="password" id="password" required autocomplete="current-password" placeholder="••••••••">
+              <button type="button" id="toggle-pw" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--silver);font-size:0.8rem;">Show</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" style="margin-top:var(--space-sm);">
+            Sign In
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:var(--space-lg);color:var(--silver);font-size:0.875rem;">
+      Don't have an account? <a href="/auth/register" style="color:var(--gold)">Create one</a>
+    </p>
+  </div>
+</section>
+</main>
+
+<%- include('../partials/footer') %>
+<script>
+document.getElementById('toggle-pw')?.addEventListener('click', function() {
+  const pw = document.getElementById('password');
+  const isText = pw.type === 'text';
+  pw.type = isText ? 'password' : 'text';
+  this.textContent = isText ? 'Show' : 'Hide';
+});
+</script>
+</body></html>

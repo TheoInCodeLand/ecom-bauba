@@ -1,0 +1,45 @@
+<div class="flash-container" id="flash-container">
+  <% if (flash && flash.success && flash.success.length) { %>
+    <% flash.success.forEach(msg => { %>
+    <div class="flash flash-success" role="alert">
+      <span><%= msg %></span>
+      <button class="flash-close" onclick="this.parentElement.remove()" aria-label="Close">✕</button>
+    </div>
+    <% }) %>
+  <% } %>
+  <% if (flash && flash.error && flash.error.length) { %>
+    <% flash.error.forEach(msg => { %>
+    <div class="flash flash-error" role="alert">
+      <span><%= msg %></span>
+      <button class="flash-close" onclick="this.parentElement.remove()" aria-label="Close">✕</button>
+    </div>
+    <% }) %>
+  <% } %>
+  <% if (flash && flash.info && flash.info.length) { %>
+    <% flash.info.forEach(msg => { %>
+    <div class="flash flash-info" role="alert">
+      <span><%= msg %></span>
+      <button class="flash-close" onclick="this.parentElement.remove()" aria-label="Close">✕</button>
+    </div>
+    <% }) %>
+  <% } %>
+  <% if (flash && flash.warning && flash.warning.length) { %>
+    <% flash.warning.forEach(msg => { %>
+    <div class="flash flash-warning" role="alert">
+      <span><%= msg %></span>
+      <button class="flash-close" onclick="this.parentElement.remove()" aria-label="Close">✕</button>
+    </div>
+    <% }) %>
+  <% } %>
+</div>
+<script>
+// Auto-dismiss flash messages after 5s
+document.querySelectorAll('.flash').forEach(el => {
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(20px)';
+    el.style.transition = 'all 0.3s ease';
+    setTimeout(() => el.remove(), 300);
+  }, 5000);
+});
+</script>

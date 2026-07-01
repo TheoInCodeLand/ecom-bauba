@@ -1,0 +1,67 @@
+<%
+  // locals: product (object with id,name,slug,base_price,compare_at_price,primary_image,is_new_arrival,is_bestseller,is_limited_edition,average_rating,review_count,in_stock,brand)
+  // showWishlist: boolean (default true)
+  const _price = parseFloat(product.base_price || 0);
+  const _compare = product.compare_at_price ? parseFloat(product.compare_at_price) : null;
+  const _isOnSale = _compare && _compare > _price;
+%>
+<article class="product-card">
+  <a href="/products/<%= product.slug %>" style="display:block;">
+    <div class="product-card__image-wrap">
+      <% if (product.primary_image) { %>
+        <img class="product-card__image" src="<%= product.primary_image %>" alt="<%= product.name %>" loading="lazy">
+      <% } else { %>
+        <div class="product-card__image" style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--pearl);">
+          <span style="color:var(--silver);font-size:2rem;">🏛</span>
+        </div>
+      <% } %>
+
+      <div class="product-card__badges">
+        <% if (product.is_new_arrival) { %><span class="badge badge-new">New</span><% } %>
+        <% if (_isOnSale) { %><span class="badge badge-sale">Sale</span><% } %>
+        <% if (product.is_limited_edition) { %><span class="badge badge-limited">Limited</span><% } %>
+        <% if (product.in_stock === false) { %><span class="badge badge-sold-out">Sold Out</span><% } %>
+      </div>
+
+      <% if (typeof showWishlist === 'undefined' || showWishlist !== false) { %>
+      <button class="product-card__wishlist wishlist-btn<%= typeof userWishlistIds !== 'undefined' && userWishlistIds.includes(product.id) ? ' wishlisted' : '' %>"
+              data-product-id="<%= product.id %>"
+              aria-label="Add to wishlist"
+              <% if (!isAuthenticated) { %>data-auth-required="true"<% } %>>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </button>
+      <% } %>
+
+      <% if (product.in_stock !== false) { %>
+      <button class="product-card__quick-add add-to-cart-quick" data-product-slug="<%= product.slug %>">
+        Quick Add
+      </button>
+      <% } %>
+    </div>
+  </a>
+
+  <div class="product-card__info">
+    <% if (product.brand) { %>
+    <div class="product-card__brand"><%= product.brand %></div>
+    <% } %>
+    <a href="/products/<%= product.slug %>">
+      <h3 class="product-card__name"><%= product.name %></h3>
+    </a>
+    <div class="product-card__price">
+      <span class="price-current<%= _isOnSale ? ' sale' : '' %>">
+        R <%= _price.toFixed(2) %>
+      </span>
+      <% if (_isOnSale) { %>
+      <span class="price-compare">R <%= _compare.toFixed(2) %></span>
+      <% } %>
+    </div>
+    <% if (product.review_count > 0) { %>
+    <div class="product-card__rating">
+      <span class="stars"><%= '★'.repeat(Math.round(product.average_rating || 0)) %><%= '☆'.repeat(5 - Math.round(product.average_rating || 0)) %></span>
+      <span class="rating-count">(<%= product.review_count %>)</span>
+    </div>
+    <% } %>
+  </div>
+</article>

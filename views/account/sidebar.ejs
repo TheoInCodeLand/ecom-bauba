@@ -1,0 +1,27 @@
+<div style="position:sticky;top:90px;">
+  <nav>
+    <ul style="list-style:none;">
+      <% const accountLinks = [
+        { href:'/account',           label:'Dashboard',   icon:'⊡' },
+        { href:'/account/profile',   label:'My Profile',  icon:'◉' },
+        { href:'/orders',            label:'My Orders',   icon:'◫' },
+        { href:'/wishlist',          label:'Wishlist',    icon:'♡' },
+        { href:'/account/addresses', label:'Addresses',   icon:'◻' },
+        { href:'/account/security',  label:'Security',    icon:'⚿' },
+        { href:'/auth/logout',       label:'Sign Out',    icon:'→' },
+      ]; %>
+      <% accountLinks.forEach(link => { %>
+      <li style="margin-bottom:0.25rem;">
+        <a href="<%= link.href %>"
+           style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 1rem;border-radius:var(--radius-sm);font-size:0.85rem;color:var(--ash);transition:all 0.15s;
+           <%= link.href === '/auth/logout' ? 'margin-top:var(--space-lg);border-top:1px solid var(--border);padding-top:var(--space-lg);color:var(--silver);' : '' %>"
+           onmouseover="this.style.background='var(--pearl)';this.style.color='var(--obsidian)'"
+           onmouseout="this.style.background='';this.style.color='<%= link.href === '/auth/logout' ? 'var(--silver)' : 'var(--ash)' %>'">
+          <span style="opacity:0.5;font-size:0.9rem;"><%= link.icon %></span>
+          <%= link.label %>
+        </a>
+      </li>
+      <% }) %>
+    </ul>
+  </nav>
+</div>
